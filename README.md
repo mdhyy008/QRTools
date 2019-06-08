@@ -2,7 +2,7 @@
 # 二维码工具
 
 
-*关于项目* *https://github.com/dabai2017/QRTools/blob/master/ABOUT.md*
+*关于项目* *https://github.com/dabai2017/QRTools/blob/master/ABOUT.md#%E5%85%B3%E4%BA%8E%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE*
 
 *帮助文档* *https://github.com/dabai2017/QRTools/blob/master/HELP.md*
 
