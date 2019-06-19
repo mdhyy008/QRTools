@@ -45,3 +45,6 @@
     <!-- 前台服务必须 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+### 程序icon
+- 用到的小图标来源:https://www.iconfont.cn/
+- 程序图标来源:酷安PDC
