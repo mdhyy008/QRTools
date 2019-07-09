@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ScanToolActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <cn.simonlee.xcodescanner.view.MaskConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:frame_viewid="@id/scannerframe">
+
+                <cn.simonlee.xcodescanner.view.AdjustTextureView
+                    android:id="@+id/textureview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <cn.simonlee.xcodescanner.view.ScannerFrameView
+                    android:id="@+id/scannerframe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:frame_whRatio="1"
+                    app:frame_widthRatio="0.7"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.33"
+                    app:scan_cycle="1500" />
+
+                <TextView
+                    android:id="@+id/textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:text="将二维码/条码放入框中"
+                    android:textColor="#fff"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/scannerframe"
+                    />
+
+
+            </cn.simonlee.xcodescanner.view.MaskConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="bottom">
+
+                <Button
+                    android:layout_gravity="center"
+                    android:id="@+id/btn_flash"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开灯"
+                    android:textSize="24sp"
+                    android:textColor="#fff"
+                    android:layout_marginBottom="50dp"
+                    style="@style/Widget.AppCompat.ButtonBar"
+                    app:layout_constraintBottom_toBottomOf="@id/scannerframe"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:id="@+id/sc_card"
+                    android:visibility="gone"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:padding="5dp"
+                          />
+
+                        <Button
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="确定"
+                            android:onClick="backRes"
+                            />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

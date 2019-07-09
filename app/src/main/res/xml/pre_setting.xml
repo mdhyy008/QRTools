@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="程序配置">
+
+
+    <PreferenceCategory android:title="配置">
+        <PreferenceScreen
+            android:icon="@mipmap/cxxx"
+            android:key="program_info"
+            android:title="程序信息" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:icon="@mipmap/fx"
+            android:key="isChrome"
+            android:summary="浏览器打开调用Chrome CustomTabs打开网页"
+            android:title="CustomTabs支持" />
+        <PreferenceScreen
+            android:icon="@mipmap/fj"
+            android:key="program_shortcuts"
+            android:title="安装快捷方式" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:icon="@mipmap/tip"
+            android:key="clip_monitor"
+            android:summary="后台监听剪切板活动,并生成二维码"
+            android:title="剪切板监听" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:icon="@mipmap/tip"
+            android:key="screenshot_monitor"
+            android:summary="监听截图里的二维码,如果检测到二维码,就会扫描出结果"
+            android:title="监听截图" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="文件清理">
+        <PreferenceScreen
+            android:icon="@mipmap/h"
+            android:key="other_deldir"
+            android:summary="删除本软件生成的所有文件"
+            android:title="清除缓存" />
+
+        <PreferenceScreen
+            android:icon="@mipmap/h"
+            android:key="other_delqr"
+            android:summary="删除相册里所有带有二维码的照片，谨慎操作"
+            android:title="二维码查杀" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="其他">
+        <PreferenceScreen
+            android:icon="@mipmap/lt"
+            android:key="other_feedback"
+            android:summary="快速发送反馈信息到开发者微信"
+            android:title="反馈问题" />
+
+        <PreferenceScreen
+            android:icon="@mipmap/ls"
+            android:key="other_version"
+            android:title="版本号" />
+        <PreferenceScreen
+            android:icon="@mipmap/wz"
+            android:key="other_help"
+            android:title="帮助" />
+
+        <PreferenceScreen
+            android:icon="@mipmap/bq"
+            android:key="other_about"
+            android:title="关于" />
+
+        <PreferenceScreen
+            android:icon="@mipmap/alipay"
+            android:key="other_pay"
+            android:summary="可以捐赠一下咩?👻"
+            android:title="捐赠"
+            />
+        <PreferenceScreen
+            android:icon="@mipmap/fx"
+            android:key="other_share"
+            android:title="分享" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="电源">
+        <PreferenceScreen
+            android:icon="@mipmap/tc"
+            android:key="exit_0"
+            android:title="彻底退出程序" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
+
+

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cons"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ScanResultActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+
+            <TextView
+                android:id="@+id/result_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="10"
+                android:padding="10dp"
+                android:text="扫描结果"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:textColor="@color/colorAccent" />
+
+        </android.support.v7.widget.CardView>
+
+
+
+        <!--识别到的内容，来指定打开方式-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="程序智障识别:"
+            android:layout_margin="10dp"
+            android:textColor="#ec2727"/>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cd1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="这是一段文本?" />
+
+                <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="res_copy"
+                    android:text="复制" />
+
+                <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:onClick="res_share"
+                    android:text="分享" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+
+        <!--识别到的内容，来指定打开方式-->
+        <android.support.v7.widget.CardView
+            android:id="@+id/cd2"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="这是一个网址?" />
+
+                <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="res_openlink"
+                    android:text="浏览器打开" />
+                <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_marginLeft="1dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="res_openweb"
+                    android:text="内置Web打开" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+        <!--识别到的内容，来指定打开方式-->
+        <android.support.v7.widget.CardView
+            android:id="@+id/cd3"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="这是电话号码?" />
+
+                <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="res_createman"
+                    android:text="新建联系人" />
+
+                <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="res_saveman"
+                    android:layout_marginLeft="1dp"
+                    android:text="保存到已有联系人"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+        <!--识别到的内容，来指定打开方式-->
+        <android.support.v7.widget.CardView
+            android:id="@+id/cd4"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="这是联系人信息? 推荐用QQ或微信扫描" />
+
+                <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="res_openwx"
+                    android:text="打开微信" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+        <!--识别到的内容，来指定打开方式-->
+
+
+        <!--识别到的内容，来指定打开方式-->
+    </LinearLayout></ScrollView>
+</android.support.constraint.ConstraintLayout>

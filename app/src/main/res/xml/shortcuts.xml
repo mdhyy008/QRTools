@@ -1,0 +1,41 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+   
+
+	<shortcut
+        android:enabled="true"
+        android:shortcutId="二维码生成"
+		android:icon="@drawable/ic_create"
+		android:shortcutShortLabel="@string/sc_create">
+		<intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.dabai.qrtools.TextQRActivity"
+            android:targetPackage="com.dabai.qrtools">
+		</intent>	
+	</shortcut>
+	
+	<shortcut
+        android:enabled="true"
+		android:icon="@drawable/ic_scan"
+        android:shortcutId="扫描二维码"
+        android:shortcutShortLabel="@string/sc_scan"
+        android:shortcutDisabledMessage="@string/sc_dismess"
+        >
+		<intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="mark.qrcode.CaptureActivity"
+            android:targetPackage="mark.qrcode">
+		</intent>	
+	</shortcut>
+
+	<shortcut
+		android:enabled="true"
+		android:icon="@drawable/ic_scan"
+		android:shortcutId="微信扫一扫"
+		android:shortcutShortLabel="@string/sc_wxscan">
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:targetClass="com.dabai.qrtools.WxScanActivity"
+			android:targetPackage="com.dabai.qrtools">
+		</intent>
+	</shortcut>
+</shortcuts>

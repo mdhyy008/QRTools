@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cons"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ClipActivity">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/clip_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:autoLink="all"
+                android:gravity="center"
+                android:linksClickable="true"
+                android:maxLines="5"
+                android:text="检测到的剪切板链接"
+                android:textIsSelectable="true" />
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:id="@+id/clip_imgcard"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <ImageView
+                android:id="@+id/clip_imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:srcCompat="@mipmap/ic_launcher" />
+        </android.support.v7.widget.CardView>
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="提取链接"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:onClick="save_QR"
+            android:text="保存二维码" />
+    </LinearLayout></ScrollView>
+</android.support.constraint.ConstraintLayout>

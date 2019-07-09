@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cons"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TextQRActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/QR_create_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="请输入文本或链接"
+                            android:maxLines="3"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/QR_create_imgcard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:elevation="10dp"
+                android:padding="10dp"
+                android:background="@drawable/ic_launcher">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:maxLines="3"
+                        android:padding="10dp"
+                        android:text="QRTools"
+                        android:visibility="gone" />
+
+                    <RelativeLayout
+                        android:id="@+id/relat"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/QR_create_imageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_launcher" />
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/icrcard"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:visibility="gone"
+                            app:cardElevation="10dp">
+
+                            <ImageView
+                                android:id="@+id/icr"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@mipmap/cxxx" />
+                        </android.support.v7.widget.CardView>
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:onClick="see_all"
+                android:text="查看大图" />
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+
+                android:layout_marginRight="10dp"
+                android:onClick="save_QR"
+                android:text="保存二维码" />
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:onClick="copy_text"
+                android:text="复制文本" />
+
+
+
+        </LinearLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>
