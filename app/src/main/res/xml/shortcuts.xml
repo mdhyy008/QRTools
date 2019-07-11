@@ -18,12 +18,11 @@
 		android:icon="@drawable/ic_scan"
         android:shortcutId="扫描二维码"
         android:shortcutShortLabel="@string/sc_scan"
-        android:shortcutDisabledMessage="@string/sc_dismess"
-        >
+        android:shortcutDisabledMessage="@string/sc_dismess">
 		<intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="mark.qrcode.CaptureActivity"
-            android:targetPackage="mark.qrcode">
+            android:targetClass="com.dabai.qrtools.ScanToolActivity"
+            android:targetPackage="com.dabai.qrtools">
 		</intent>	
 	</shortcut>
 

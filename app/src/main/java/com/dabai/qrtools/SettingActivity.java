@@ -392,10 +392,11 @@ public class SettingActivity extends PreferenceActivity {
                                     Intent intent1 = new Intent(context, TextQRActivity.class);
                                     addShortCut(context, "生成二维码", R.drawable.ic_create, intent1);
                                     break;
+
                                 case "扫描二维码":
                                     //安装了 扫码工具
-                                    Intent intent2 = new Intent("mark.qrcode.SCAN");
-                                    intent2.setClassName("mark.qrcode", "mark.qrcode.CaptureActivity");
+                                    Intent intent2 = new Intent();
+                                    intent2.setClassName("com.dabai.qrtools", "com.dabai.qrtools.ScanToolActivity");
                                     addShortCut(context, "扫描二维码", R.drawable.ic_scan, intent2);
                                     break;
                                 case "微信扫一扫":

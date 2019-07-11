@@ -41,6 +41,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -433,11 +435,6 @@ public class MainActivity extends AppCompatActivity {
          * 解析下WiFi配置信息
          * 得到 ssid 和 password
          */
-
-
-        wificonfig = wificonfig.substring(wificonfig.indexOf("WifiConfiguration"),wificonfig.indexOf("/WifiConfiguration"));
-
-
 
 
         AlertDialog ad = new AlertDialog.Builder(MainActivity.this)

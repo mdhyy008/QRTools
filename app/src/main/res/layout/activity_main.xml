@@ -71,6 +71,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:onClick="wifi_config"
+            android:enabled="false"
             android:text="共享WiFi连接" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

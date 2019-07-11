@@ -7,8 +7,8 @@ android {
         applicationId "com.dabai.qrtools"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 42
-        versionName "1.9 - 一个有自己扫描器的版本"
+        versionCode 45
+        versionName "1.9 - 一个修复了bug的版本"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
