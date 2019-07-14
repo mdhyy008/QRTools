@@ -320,7 +320,9 @@ public class SettingActivity extends PreferenceActivity {
 
                                 File dir = new File("/sdcard/二维码助手/");
                                 File tmpimg = new File("/sdcard/PictureSelector.temp.jpg");
+
                                 new DabaiUtils().deleteDir(new File("/sdcard/QRTcrash/"));
+                                new DabaiUtils().deleteDir(new File("/sdcard/QRTWifi/"));
                                 for (File file : dir.listFiles()) {
                                     if (file.delete()) {
                                         sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));

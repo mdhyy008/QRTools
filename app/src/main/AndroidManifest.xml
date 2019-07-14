@@ -16,9 +16,11 @@
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" /> <!-- wifi -->
+
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 震动 和 安装App -->
     <uses-permission android:name="android.permission.VIBRATE" /> <!-- 前台服务必须 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 查看使用情况 -->

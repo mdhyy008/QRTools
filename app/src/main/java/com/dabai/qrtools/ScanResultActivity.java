@@ -2,22 +2,36 @@ package com.dabai.qrtools;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.biometrics.BiometricPrompt;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class ScanResultActivity extends AppCompatActivity {
 
@@ -30,8 +44,12 @@ public class ScanResultActivity extends AppCompatActivity {
     boolean isChorme = true;
 
 
-    CardView cd1, cd2, cd3, cd4;
-
+    CardView cd1, cd2, cd3, cd4, cd5;
+    private String password, netWorkType, netWorkName;
+    private WifiAdmin wifiAdmin;
+    private ProgressDialog pd;
+    private WifiManager mWifiManager;
+    WifiInfo mWifiInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +76,13 @@ public class ScanResultActivity extends AppCompatActivity {
         cd2 = findViewById(R.id.cd2);
         cd3 = findViewById(R.id.cd3);
         cd4 = findViewById(R.id.cd4);
+        cd5 = findViewById(R.id.cd5);
 
-
-
-
+        wifiAdmin = new WifiAdmin(getApplicationContext());
         help_checked();
+
+        pd = new ProgressDialog(ScanResultActivity.this);
+        pd.setTitle("提示");
     }
 
     /**
@@ -87,6 +107,11 @@ public class ScanResultActivity extends AppCompatActivity {
 
         if (restext.toUpperCase().contains("BEGIN")) {
             cd4.setVisibility(View.VISIBLE);
+        }
+
+        if (restext.contains("P:") && restext.contains("T:")) {
+            // 自动连接wifi
+            cd5.setVisibility(View.VISIBLE);
         }
 
 
@@ -168,6 +193,7 @@ public class ScanResultActivity extends AppCompatActivity {
     public void res_createman(View view) {
         addContact(this, "", restext.replace("-", ""));
     }
+
     //保存联系人
     public void res_saveman(View view) {
         saveExistContact(this, "", restext.replace("-", ""));
@@ -192,8 +218,138 @@ public class ScanResultActivity extends AppCompatActivity {
 
     public void res_openweb(View view) {
         //调用本程序
-        Intent intent = new Intent(this,WebActivity.class);
+        Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra("link", restext);
         startActivity(intent);
     }
+
+
+
+
+
+
+    public void res_linkwifi(View view) {
+
+        String passwordTemp = restext.substring(restext
+                .indexOf("P:"));
+        password = passwordTemp.substring(2,
+                passwordTemp.indexOf(";"));
+        String netWorkTypeTemp = restext.substring(restext
+                .indexOf("T:"));
+        netWorkType = netWorkTypeTemp.substring(2,
+                netWorkTypeTemp.indexOf(";"));
+        String netWorkNameTemp = restext.substring(restext
+                .indexOf("S:"));
+        netWorkName = netWorkNameTemp.substring(2,
+                netWorkNameTemp.indexOf(";"));
+
+        new AlertDialog.Builder(this)
+                .setTitle("提示")
+                .setMessage("确定连接到 [" + netWorkName + "] 嘛?\n\nWiFi名称:" + netWorkName + "\n密码:" + password + "\n加密方式:" + netWorkType)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        pd.setMessage("正在连接 - " + netWorkName);
+
+                        pd.show();
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                if (!wifiAdmin.mWifiManager.isWifiEnabled()) {
+                                    wifiAdmin.openWifi();
+                                }
+
+                                int net_type = 0x13;
+                                if (netWorkType
+                                        .compareToIgnoreCase("wpa") == 0) {
+                                    net_type = WifiAdmin.TYPE_WPA;// wpa
+                                } else if (netWorkType
+                                        .compareToIgnoreCase("wep") == 0) {
+                                    net_type = WifiAdmin.TYPE_WEP;// wep
+                                } else {
+                                    net_type = WifiAdmin.TYPE_NO_PASSWD;// 无加密
+                                }
+
+                                wifiAdmin.addNetwork(netWorkName, password, net_type);
+
+                                try {
+                                    addWifiDB(netWorkName, restext);
+                                } catch (IOException e) {
+
+                                }
+
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+
+                                }
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        if (isNetworkOnline()) {
+                                            pd.dismiss();
+                                            new AlertDialog.Builder(ScanResultActivity.this)
+                                                    .setMessage("连接成功了呢O(∩_∩)O").setTitle("提示")
+                                                    .setPositiveButton("OK", null)
+                                                    .show();
+                                        } else {
+                                            pd.dismiss();
+                                            new AlertDialog.Builder(ScanResultActivity.this)
+                                                    .setMessage("现在好像不能上网呦(T_T)").setTitle("提示")
+                                                    .setPositiveButton("OK", null).show();
+                                        }
+
+
+                                    }
+                                });
+
+                            }
+                        }).start();
+
+
+                    }
+                }).setNeutralButton("取消", null).show();
+
+
+    }
+
+
+    public boolean isNetworkOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("ping -c 3 www.baidu.com");
+            int exitValue = ipProcess.waitFor();
+            Log.i("Avalible", "Process:" + exitValue);
+            return (exitValue == 0);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    /**
+     * 写入WiFi库
+     *
+     * @param wifiname
+     * @param wifiinfo
+     */
+    public void addWifiDB(String wifiname, String wifiinfo) throws IOException {
+        //写入 QRT WiFi information 文件   简称 QWI
+
+        File file = new File("/sdcard/QRTWifi/");
+        if (file.exists()) {
+            new FileUtils().writeText("/sdcard/QRTWifi/" + wifiname, wifiinfo, true);
+        } else {
+            file.mkdirs();
+            new FileUtils().writeText("/sdcard/QRTWifi/" + wifiname, wifiinfo, true);
+        }
+    }
+
+
 }

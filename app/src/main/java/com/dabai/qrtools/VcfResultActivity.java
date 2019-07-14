@@ -74,20 +74,10 @@ public class VcfResultActivity extends AppCompatActivity {
         String content = "BEGIN:VCARD\n" + "VERSION:3.0\n" + "N:" + name + "\n" + "TEL:" + phoneNumber + "\n" +"NOTE:QRTools Share\n" + "END:VCARD";
 
         tv.setText(content);
-        Bitmap bit = createQRCodeBitmap(content, 700, 700, "UTF-8", "H", "1", Color.parseColor(DabaiUtils.getRandColorCode()), Color.WHITE);
+        Bitmap bit = createQRCodeBitmap(content, 700, 700, "UTF-8", "H", "1", Color.BLACK, Color.WHITE);
         img.setImageBitmap(bit);
 
 
-        CardView imgcard = findViewById(R.id.vcf_imgcard);
-
-        imgcard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bitmap bit = createQRCodeBitmap(tv.getText().toString(), 700, 700, "UTF-8", "H", "1", Color.parseColor(DabaiUtils.getRandColorCode()), Color.WHITE);
-                img.setImageBitmap(bit);
-
-            }
-        });
 
     }
 

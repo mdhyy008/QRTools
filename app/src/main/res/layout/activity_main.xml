@@ -5,73 +5,187 @@
     android:id="@+id/cons"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#FFF"
 
-    <LinearLayout
+    >
+
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:scrollbars="none"
+        >
 
-
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:onClick="QR_create"
-            android:text="二维码生成" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+
+            <!-- left -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
 
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:onClick="QR_scan"
-            android:text="扫描二维码" />
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="8dp"
+                    app:cardBackgroundColor="#EC407A"
+                    >
 
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:onClick="vcf_create"
-            android:text="联系人二维码" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:onClick="more_create"
-            android:text="批量生成二维码"
-
-            />
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:enabled="false"
-            android:onClick="gif_create"
-            android:text="生成动态二维码" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:text="二维码生成"
+                            android:textSize="20sp"
+                            android:onClick="QR_create"
+                            android:gravity="center"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:textColor="#FFFFFF"/>
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
 
 
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:onClick="wifi_config"
-            android:enabled="false"
-            android:text="共享WiFi连接" />
-    </LinearLayout>
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="8dp"
+                    app:cardBackgroundColor="#5C6BC0">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:text="扫描二维码"
+                            android:onClick="QR_scan"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:background="?android:attr/selectableItemBackground"
+                            />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+
+            </LinearLayout>
+
+
+            <!-- right -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="8dp"
+                    app:cardBackgroundColor="#42A5F5">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:onClick="vcf_create"
+                            android:text="联系人二维码"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp"
+                            android:background="?android:attr/selectableItemBackground"
+                            />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="8dp"
+                    app:cardBackgroundColor="#00BFA5">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:onClick="more_create"
+                            android:text="批量生成"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp"
+                            android:background="?android:attr/selectableItemBackground"
+                            />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="8dp"
+                    app:cardBackgroundColor="#607D8B"
+
+                    >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:onClick="wifi_config"
+                            android:text="共享WiFi连接"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp"
+                            android:background="?android:attr/selectableItemBackground"
+                            />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

@@ -17,26 +17,40 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -58,14 +72,29 @@ public class MainActivity extends AppCompatActivity {
     float alpha = 0;
     private String TAG = "dabai";
     private int REQUEST_CODE_SCAN = 100;
-    private boolean clip_monitor, isChrome, screenshot_monitor;
+    private boolean clip_monitor, easy, screenshot_monitor;
     private Intent screenintent, clipintent;
+    private RadioGroup rg;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+
+        //Ui美化
+        SharedPreferences sp = this.getSharedPreferences("com.dabai.qrtools_preferences", 0);
+        easy = sp.getBoolean("easy", false);
+
+        if (easy) {
+            setContentView(R.layout.activity_main_bak);
+
+        } else {
+            setContentView(R.layout.activity_main);
+            getSupportActionBar().setElevation(0);
+        }
+
+
         context = getApplicationContext();
 
 
@@ -122,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
 
         clip_monitor = sp.getBoolean("clip_monitor", false);
         screenshot_monitor = sp.getBoolean("screenshot_monitor", false);
-
         //Log.d(TAG, "剪切板服务: " + clip_monitor);
         //Log.d(TAG, "截图服务: " + screenshot_monitor);
 
@@ -172,8 +200,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void QR_create(View view) {
+    public void QR_create(View view)
+    {
+
         startActivity(new Intent(this, TextQRActivity.class));
+
     }
 
     public void QR_scan(View view) {
@@ -200,11 +231,23 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (requestCode == 6) {
-            Uri uri = ContactsContract.Contacts.CONTENT_URI;
-            Intent intent = new Intent(Intent.ACTION_PICK, uri);
-            startActivityForResult(intent, 5);
-        }
+            int checkResult16 = getApplicationContext().checkCallingOrSelfPermission(Manifest.permission.READ_CONTACTS);
+            //if(!=允许),抛出异常
+            if (checkResult16 == PackageManager.PERMISSION_GRANTED) {
 
+                Uri uri = ContactsContract.Contacts.CONTENT_URI;
+                Intent intent = new Intent(Intent.ACTION_PICK, uri);
+                startActivityForResult(intent, 5);
+            }
+        }
+        if (requestCode == 200) {
+            int checkResult16 = getApplicationContext().checkCallingOrSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            //if(!=允许),抛出异常
+            if (checkResult16 == PackageManager.PERMISSION_GRANTED) {
+
+                share_thiswifi();
+            }
+        }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -212,7 +255,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
 
 
         // 扫描二维码/条码回传
@@ -351,10 +393,183 @@ public class MainActivity extends AppCompatActivity {
 
     boolean isroot;
 
+
     public void wifi_config(View view) {
-        suthread();
+
+        final AlertDialog ad = new AlertDialog.Builder(this).setTitle("分享WiFi")
+                .setItems(new String[]{"手动生成分享码", "自动检测已连接WiFi", "历史连接记录"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        switch (i) {
+
+                            case 0:
+
+                                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                        != PackageManager.PERMISSION_GRANTED) {//未开启定位权限
+                                    Toast.makeText(MainActivity.this, "需要开启定位权限！", Toast.LENGTH_SHORT).show();
+                                    //开启定位权限,200是标识码
+                                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
+                                } else {
+
+                                    share_thiswifi();
+
+                                }
+
+                                break;
+                            case 1:
+                                suthread();
+                                break;
+
+                            case 2:
+
+
+                                final View view2 = LayoutInflater.from(context).inflate(R.layout.dialog_wifihistory, null);
+                                final AlertDialog addddddd2 = new AlertDialog.Builder(MainActivity.this)
+                                        .setTitle("选择一个历史连接")
+                                        .setView(view2)
+                                        .show();
+
+
+                                Window window2 = addddddd2.getWindow();//对话框窗口
+                                window2.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
+                                window2.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
+
+                                ListView lv = view2.findViewById(R.id.lv);
+                                TextView tv = view2.findViewById(R.id.textView4);
+
+
+                                try {
+                                    final File dir = new File("/sdcard/QRTWifi/");
+                                    final String[] data = dir.list();
+
+                                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                                            try {
+                                                String text = new FileUtils().readText(new File(dir, data[i])).trim();
+
+                                                Intent resultIntent = new Intent(MainActivity.this, TextQRActivity.class);
+                                                resultIntent.putExtra("download", text);
+                                                addddddd2.dismiss();
+                                                startActivity(resultIntent);
+
+                                            } catch (FileNotFoundException e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                        }
+                                    });
+
+                                    ArrayAdapter adapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, data);
+                                    lv.setAdapter(adapter);
+                                } catch (Exception e) {
+                                    tv.setVisibility(View.VISIBLE);
+                                    lv.setVisibility(View.GONE);
+
+                                }
+
+
+                                break;
+
+                        }
+                    }
+                }).show();
+
+
+        Window window = ad.getWindow();//对话框窗口
+        window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
+        window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
+
+
     }
 
+    private void share_thiswifi() {
+        final View view = LayoutInflater.from(context).inflate(R.layout.dialog_wifishare, null);
+
+        AlertDialog addddddd = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("请输入各项空值")
+                .setView(view)
+                .setNeutralButton("取消", null)
+                .setPositiveButton("生成", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                        switch (rg.getCheckedRadioButtonId()) {
+
+
+                            case R.id.radioButton:
+                                EditText ed1 = view.findViewById(R.id.ed1);
+
+                                String text = "WIFI:T:;P:;S:" + ed1.getText().toString() + ";";
+
+                                ToRes(text);
+                                break;
+
+                            case R.id.radioButton2:
+                                EditText ed11 = view.findViewById(R.id.ed1);
+                                EditText ed22 = view.findViewById(R.id.ed2);
+
+                                String text2 = "WIFI:T:WPA;P:" + ed22.getText().toString() + ";S:" + ed11.getText().toString() + ";";
+
+                                ToRes(text2);
+
+                                break;
+                        }
+
+                    }
+                })
+                .show();
+
+        rg = view.findViewById(R.id.rg);
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            EditText ed2 = view.findViewById(R.id.ed2);
+
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (radioGroup.getCheckedRadioButtonId()) {
+                    case R.id.radioButton:
+
+                        ed2.setEnabled(false);
+                        break;
+
+                    case R.id.radioButton2:
+
+                        ed2.setEnabled(true);
+                        break;
+                }
+
+            }
+        });
+
+
+        WifiManager wifiManager = (WifiManager) context.getSystemService(WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+
+        EditText ed1 = view.findViewById(R.id.ed1);
+
+        ed1.setText(wifiInfo.getSSID().replace("\"", ""));
+
+        WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = mWifiManager.getConnectionInfo();
+
+
+        Window window = addddddd.getWindow();//对话框窗口
+        window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
+        window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
+
+    }
+
+
+    void ToRes(String text) {
+        Intent resultIntent = new Intent(MainActivity.this, TextQRActivity.class);
+        resultIntent.putExtra("download", text);
+        startActivity(resultIntent);
+
+    }
 
     public void suthread() {
 

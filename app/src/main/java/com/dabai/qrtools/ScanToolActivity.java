@@ -5,21 +5,38 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
-import android.provider.ContactsContract;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
+import com.wildma.pictureselector.PictureSelector;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import cn.simonlee.xcodescanner.core.CameraScanner;
 import cn.simonlee.xcodescanner.core.GraphicDecoder;
@@ -40,6 +57,11 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
 
     TextView sc_text;
     CardView sc_card;
+
+
+    AlertDialog resdia;
+    private String result_end;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +93,15 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
         sc_card = findViewById(R.id.sc_card);
 
 
+        resdia = new AlertDialog.Builder(this).setTitle("结果").setMessage("正在过滤数据")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ToResult(result_end);
+                        finish();
+                    }
+                }).create();
+
 
         /*
          * 注意，SDK21的设备是可以使用NewCameraScanner的，但是可能存在对新API支持不够的情况，比如红米Note3（双网通Android5.0.2）
@@ -90,7 +121,7 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
 
 
         if (requestCode == 1) {
-            startActivity(new Intent(this,getClass()));
+            startActivity(new Intent(this, getClass()));
             finish();
 
         }
@@ -129,15 +160,123 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
 
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.scan, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
+            case R.id.sc_other:
+
+                /**
+                 * 图库选择  可裁剪
+                 *
+                 * */
+                PictureSelector
+                        .create(ScanToolActivity.this, PictureSelector.SELECT_REQUEST_CODE)
+                        .selectPicture(false, 200, 200, 1, 1);
+
+                return true;
             case android.R.id.home:
                 // 处理返回逻辑
                 finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /*结果回调*/
+        if (requestCode == PictureSelector.SELECT_REQUEST_CODE) {
+            if (data != null) {
+                String picturePath = data.getStringExtra(PictureSelector.PICTURE_PATH);
+                Bitmap bitmap = getLoacalBitmap(picturePath); //从本地取图片(在cdcard中获取)  //
+
+
+                //文件 转 bitmap
+                Bitmap obmp = BitmapFactory.decodeFile(picturePath);
+                int width1 = obmp.getWidth();
+                int height1 = obmp.getHeight();
+                int[] data1 = new int[width1 * height1];
+                obmp.getPixels(data1, 0, width1, 0, 0, width1, height1);
+                RGBLuminanceSource source = new RGBLuminanceSource(width1, height1, data1);
+                BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
+
+
+                new QrCodeAsyncTask().execute(bitmap1);
+
+            }
+        }
+    }
+
+
+    class QrCodeAsyncTask extends AsyncTask<BinaryBitmap, Void, Result> {
+
+        @Override
+        protected Result doInBackground(BinaryBitmap... params) {
+            QRCodeReader reader = new QRCodeReader();
+            Result result = null;
+            try {
+                result = reader.decode(params[0]);
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            } catch (ChecksumException e) {
+                e.printStackTrace();
+            } catch (FormatException e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Result result) {
+            super.onPostExecute(result);
+            if (result != null) {
+                ToResult("" + result);
+                finish();
+
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog addddddd = new AlertDialog.Builder(ScanToolActivity.this)
+                                .setTitle("提示")
+                                .setMessage("没有扫描到图片中的QR码数据")
+                                .setPositiveButton("确定", null)
+                                .show();
+
+                        Window window = addddddd.getWindow();//对话框窗口
+                        window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
+                        window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
+
+                    }
+                });
+            }
+        }
+    }
+
+
+    /**
+     * 加载本地图片
+     *
+     * @param url
+     * @return
+     */
+    public static Bitmap getLoacalBitmap(String url) {
+        try {
+            FileInputStream fis = new FileInputStream(url);
+            return BitmapFactory.decodeStream(fis);  ///把流转化为Bitmap图片
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -248,17 +387,25 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
     public void decodeComplete(String result, int type, int quality, int requestCode) {
         if (result == null) return;
         if (result.equals(mResult)) {
+
+            resdia.show();
+
+
+            Window window = resdia.getWindow();//对话框窗口
+            window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
+            window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
+
+
             if (++mCount > 3) {//连续四次相同则显示结果（主要过滤脏数据，也可以根据条码类型自定义规则）
                 if (quality < 10) {
-                    sc_card.setVisibility(View.VISIBLE);
-                    sc_text.setText(result);
-
+                    result_end = result;
+                    resdia.setMessage(result);
                 } else if (quality < 100) {
-                    sc_card.setVisibility(View.VISIBLE);
-                    sc_text.setText(result);
+                    result_end = result;
+                    resdia.setMessage(result);
                 } else {
-                    sc_card.setVisibility(View.VISIBLE);
-                    sc_text.setText(result);
+                    result_end = result;
+                    resdia.setMessage(result);
                 }
             }
         } else {
@@ -287,8 +434,5 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
     }
 
 
-    public void backRes(View view) {
-        ToResult(sc_text.getText().toString());
-        finish();
-    }
+
 }

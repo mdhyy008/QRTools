@@ -228,9 +228,18 @@ public class WebActivity extends AppCompatActivity {
                     return false;//返回false 意思是不拦截，让webview自己处理
                 } else {
                     // Otherwise allow the OS to handle things like tel, mailto, etc.
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(intent);
-                    finish();
+
+
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(intent);
+                        finish();
+                    } catch (Exception e) {
+                        Snackbar.make(cons, "异常:"+e.toString(), Snackbar.LENGTH_SHORT).show();
+
+                    }
+
+
                     return true;
                 }
 

@@ -84,7 +84,7 @@ public class DabaiUtils {
         Log.d("dabai", "chrome支持?: " + isChrome);
         if (isChrome) {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(); //Sets the toolbar color.
-            builder.setToolbarColor(Color.parseColor("#01ac95"));
+            builder.setToolbarColor(Color.parseColor("#FFFFFF"));
             builder.setShowTitle(true);
             //显示网页标题
             CustomTabsIntent customTabsIntent = builder.build();
@@ -178,7 +178,6 @@ public class DabaiUtils {
      * 解压缩功能.
      * 将zipFile文件解压到folderPath目录下.
      *
-     * @throws Exception
      */
     public int unzip_DirFile(File zipFile, String folderPath) throws ZipException, IOException {
         //public static void upZipFile() throws Exception{
