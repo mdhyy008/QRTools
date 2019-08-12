@@ -295,12 +295,28 @@ public class ScanResultActivity extends AppCompatActivity {
                                             pd.dismiss();
                                             new AlertDialog.Builder(ScanResultActivity.this)
                                                     .setMessage("连接成功了呢O(∩_∩)O").setTitle("提示")
+                                                    .setNeutralButton("亲自看一看", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            Intent intent = new Intent(ScanResultActivity.this, WebActivity.class);
+                                                            intent.putExtra("link", "https://www.baidu.com/");
+                                                            startActivity(intent);
+                                                        }
+                                                    })
                                                     .setPositiveButton("OK", null)
                                                     .show();
                                         } else {
                                             pd.dismiss();
                                             new AlertDialog.Builder(ScanResultActivity.this)
                                                     .setMessage("现在好像不能上网呦(T_T)").setTitle("提示")
+                                                    .setNeutralButton("亲自看一看", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            Intent intent = new Intent(ScanResultActivity.this, WebActivity.class);
+                                                            intent.putExtra("link", "https://www.baidu.com/");
+                                                            startActivity(intent);
+                                                        }
+                                                    })
                                                     .setPositiveButton("OK", null).show();
                                         }
 

@@ -6,7 +6,7 @@
         <item name="colorPrimary">#fff</item>
         <item name="colorPrimaryDark">#fff</item>
         <item name="colorAccent">@color/colorAccent</item>
-
+        <item name="android:textViewStyle">@style/MyTextViewStyle</item>
     </style>
 
     <!--自定义对话框样式-->
@@ -17,6 +17,9 @@
         <item name="android:windowExitAnimation">@anim/dialog_bottom_exit</item>
     </style>
 
+    <style name="MyTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/googlesan</item>
+    </style>
 
 
     <!--自定义对话框样式-->

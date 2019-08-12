@@ -216,18 +216,25 @@ public class ScreenshotMonitorService extends Service {
                                 } else {
                                     Toast.makeText(ScreenshotMonitorService.this, "删除截图失败", Toast.LENGTH_SHORT).show();
                                 }
-                                Intent resultIntent = new Intent(ScreenshotMonitorService.this, ScanResultActivity.class);
+
+                                Intent resultIntent = new Intent(getApplicationContext(), ScanResultActivity.class);
+                                resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 resultIntent.putExtra("result", text);
+
                                 startActivity(resultIntent);
+
                             }
                         })
 
                         .setPositiveButton("直接查看", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+
                                 Intent resultIntent = new Intent(ScreenshotMonitorService.this, ScanResultActivity.class);
                                 resultIntent.putExtra("result", text);
+                                resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(resultIntent);
+
                             }
                         }).setNeutralButton("取消", null).create();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -60,11 +60,11 @@
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="230dp"
                     android:layout_margin="10dp"
+                    app:cardBackgroundColor="#5C6BC0"
                     app:cardCornerRadius="10dp"
-                    app:cardElevation="8dp"
-                    app:cardBackgroundColor="#5C6BC0">
+                    app:cardElevation="8dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -74,15 +74,43 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
-                            android:text="扫描二维码"
-                            android:onClick="QR_scan"
-                            android:textColor="#FFFFFF"
-                            android:textSize="20sp"
-                            android:gravity="center"
                             android:background="?android:attr/selectableItemBackground"
-                            />
+                            android:gravity="center"
+                            android:onClick="QR_scan"
+                            android:text="扫描二维码"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp" />
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/get_clip"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_margin="10dp"
+                    app:cardBackgroundColor="#EF6C00"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="8dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:gravity="center"
+                            android:onClick="QR_getclip"
+                            android:text="取剪切板"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp" />
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+
 
 
             </LinearLayout>
@@ -155,11 +183,11 @@
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="200dp"
                     android:layout_margin="10dp"
+                    app:cardBackgroundColor="#607D8B"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="8dp"
-                    app:cardBackgroundColor="#607D8B"
 
                     >
 
@@ -171,13 +199,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
+                            android:background="?android:attr/selectableItemBackground"
                             android:gravity="center"
                             android:onClick="wifi_config"
                             android:text="共享WiFi连接"
                             android:textColor="#FFFFFF"
-                            android:textSize="20sp"
-                            android:background="?android:attr/selectableItemBackground"
-                            />
+                            android:textSize="20sp" />
                     </RelativeLayout>
                 </android.support.v7.widget.CardView>
 

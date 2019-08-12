@@ -373,22 +373,28 @@ public class TextQRActivity extends AppCompatActivity {
 
     public void save_QR(View view) {
 
-        if (isOK) {
 
-            CardView imgcard = findViewById(R.id.QR_create_imgcard);
-            Bitmap bitmap = getBitmapByView(imgcard);//iv是View
-            int ran = new Random().nextInt(1000);
-            savePhotoToSDCard(bitmap, "/sdcard/二维码助手", "QRCode_" + ran);
-            file = new File("/sdcard/二维码助手/QRCode_" + ran + ".png");
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+        try {
+            if (isOK) {
 
-            Snackbar.make(cons, "保存" + file.getAbsolutePath() + "成功", Snackbar.LENGTH_SHORT).show();
-            hideInput();
+                CardView imgcard = findViewById(R.id.QR_create_imgcard);
+                Bitmap bitmap = getBitmapByView(imgcard);//iv是View
+                int ran = new Random().nextInt(1000);
+                savePhotoToSDCard(bitmap, "/sdcard/二维码助手", "QRCode_" + ran);
+                file = new File("/sdcard/二维码助手/QRCode_" + ran + ".png");
+                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
 
-        } else {
-            Snackbar.make(cons, "现在不能保存", Snackbar.LENGTH_SHORT).show();
-            hideInput();
+                Snackbar.make(cons, "保存" + file.getAbsolutePath() + "成功", Snackbar.LENGTH_SHORT).show();
+                hideInput();
+
+            } else {
+                Snackbar.make(cons, "现在不能保存", Snackbar.LENGTH_SHORT).show();
+                hideInput();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "保存失败", Toast.LENGTH_SHORT).show();
         }
+
     }
 
 

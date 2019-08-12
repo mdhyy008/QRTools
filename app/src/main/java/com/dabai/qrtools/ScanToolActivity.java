@@ -2,6 +2,7 @@ package com.dabai.qrtools;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.graphics.SurfaceTexture;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -61,6 +63,7 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
 
     AlertDialog resdia;
     private String result_end;
+    private Vibrator vibrator;
 
 
     @Override
@@ -81,7 +84,7 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
-
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         mTextureView = findViewById(R.id.textureview);
         mTextureView.setSurfaceTextureListener(this);
 
@@ -388,15 +391,20 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
         if (result == null) return;
         if (result.equals(mResult)) {
 
-            resdia.show();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    vibrator.vibrate(100);
+                }
+            }).start();
 
+            resdia.show();
 
             Window window = resdia.getWindow();//对话框窗口
             window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
             window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
 
-
-            if (++mCount > 3) {//连续四次相同则显示结果（主要过滤脏数据，也可以根据条码类型自定义规则）
+            if (++mCount > 1) {//连续四次相同则显示结果（主要过滤脏数据，也可以根据条码类型自定义规则）
                 if (quality < 10) {
                     result_end = result;
                     resdia.setMessage(result);
@@ -432,7 +440,6 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
             }
         }
     }
-
 
 
 }

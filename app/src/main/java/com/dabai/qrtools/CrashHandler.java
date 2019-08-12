@@ -114,7 +114,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                         try {
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss EEE", Locale.CHINA);
                             String titlem = "QRTools[来自:" + Build.MODEL + "的异常]";
-                            String textm = " **[" + sdf.format(new Date()) + "]**";
+                            String textm = " **[时间：" +sdf.format(new Date())+ "]** **[版本：" + new DabaiUtils().getVersionName(mContext) + "]**";
 
                             URL url = new URL("https://sc.ftqq.com/SCU35649Tec88ecad70ac8f2375a6c5a6e323c8425be9602402c5b.send?text=" + titlem + "&desp=" + eeeee + textm);
                             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

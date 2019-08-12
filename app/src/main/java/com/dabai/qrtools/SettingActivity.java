@@ -98,7 +98,6 @@ public class SettingActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pre_setting);
-
         zuzhi();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -442,7 +441,7 @@ public class SettingActivity extends PreferenceActivity {
                 startActivity(new Intent(this, FeedBack.class));
                 break;
             case "other_help":
-                new DabaiUtils().openLink(this, "https://github.com/dabai2017/QRTools/blob/master/HELP.md#%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3");
+                new DabaiUtils().openLink(this, "https://github.com/dabai2017/QRTools/blob/master/HELP.md");
                 break;
             case "other_version":
 
@@ -489,7 +488,7 @@ public class SettingActivity extends PreferenceActivity {
 
                 break;
             case "other_about":
-                new DabaiUtils().openLink(this, "https://github.com/dabai2017/QRTools/blob/master/ABOUT.md#%E5%85%B3%E4%BA%8E%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE");
+                new DabaiUtils().openLink(this, "https://github.com/dabai2017/QRTools/blob/master/ABOUT.md");
                 break;
             case "clip_monitor":
                 boolean clip_monitor = preference.getSharedPreferences().getBoolean("clip_monitor", false);
@@ -703,20 +702,20 @@ public class SettingActivity extends PreferenceActivity {
         pro_total.setProgress(0);
         pro_count.setText("0");
         pro_seek.setProgress(1);
-        speed = 50;
+        speed = 200;
 
         pro_seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 switch (progress) {
                     case 0:
-                        speed = 100;
+                        speed = 400;
                         break;
                     case 1:
-                        speed = 50;
+                        speed = 200;
                         break;
                     case 2:
-                        speed = 20;
+                        speed = 100;
                         break;
                 }
             }
@@ -759,10 +758,22 @@ public class SettingActivity extends PreferenceActivity {
                         new QrCodeAsyncTask().execute(bitmap);
 
 
-                        //休息一秒
-                        try {
-                            Thread.sleep(speed);
-                        } catch (InterruptedException e) {
+                        if (total < 30){
+
+                            //休息一秒
+                            try {
+                                Thread.sleep(700);
+                            } catch (InterruptedException e) {
+                            }
+
+                        }else {
+
+                            //休息一秒
+                            try {
+                                Thread.sleep(speed);
+                            } catch (InterruptedException e) {
+                            }
+
                         }
 
 

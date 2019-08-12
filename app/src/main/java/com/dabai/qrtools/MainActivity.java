@@ -8,6 +8,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,6 +32,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -181,6 +183,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+//检测Android版本隐藏功能
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P + 1) {
+            CardView get_clip = findViewById(R.id.get_clip);
+            get_clip.setVisibility(View.GONE);
+
+        }
+
+
     }
 
 
@@ -200,8 +210,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void QR_create(View view)
-    {
+    public void QR_create(View view) {
 
         startActivity(new Intent(this, TextQRActivity.class));
 
@@ -256,19 +265,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        try {
+
 
         // 扫描二维码/条码回传
         if (requestCode == 5 && resultCode == RESULT_OK) {
             if (data != null) {
+
                 Uri uri = data.getData();
                 String[] contacts = getPhoneContacts(uri);
-
                 Intent intent = new Intent(this, VcfResultActivity.class);
                 intent.putExtra("name", contacts[0]);
                 intent.putExtra("phoneNumber", contacts[1]);
                 startActivity(intent);
+
             }
         }
+    }catch (Exception e){
+            Toast.makeText(context, "不可预知错误发生了", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
@@ -397,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
     public void wifi_config(View view) {
 
         final AlertDialog ad = new AlertDialog.Builder(this).setTitle("分享WiFi")
-                .setItems(new String[]{"手动生成分享码", "自动检测已连接WiFi", "历史连接记录"}, new DialogInterface.OnClickListener() {
+                .setItems(new String[]{"手动生成分享码", "历史连接记录"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (i) {
@@ -417,10 +433,6 @@ public class MainActivity extends AppCompatActivity {
 
                                 break;
                             case 1:
-                                suthread();
-                                break;
-
-                            case 2:
 
 
                                 final View view2 = LayoutInflater.from(context).inflate(R.layout.dialog_wifihistory, null);
@@ -667,7 +679,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isRoot() {
         try {
             Process process = Runtime.getRuntime().exec("su");
-            process.getOutputStream().write("exit\n".getBytes());
+            process.getOutputStream().write("exit\n" .getBytes());
             process.getOutputStream().flush();
 
             int i = process.waitFor();
@@ -703,4 +715,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void QR_getclip(View view) {
+
+
+        try {
+            ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            String text = "";
+
+            text = clip.getText().toString();
+            ToRes(text);
+
+        } catch (Exception e) {
+            Toast.makeText(context, "剪切板异常:)", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
 }
