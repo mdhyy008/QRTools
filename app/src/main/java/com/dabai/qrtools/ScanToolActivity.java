@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,10 @@ import cn.simonlee.xcodescanner.core.NewCameraScanner;
 import cn.simonlee.xcodescanner.core.OldCameraScanner;
 import cn.simonlee.xcodescanner.core.ZBarDecoder;
 import cn.simonlee.xcodescanner.view.AdjustTextureView;
+import co.mobiwise.materialintro.animation.MaterialIntroListener;
+import co.mobiwise.materialintro.shape.Focus;
+import co.mobiwise.materialintro.shape.FocusGravity;
+import co.mobiwise.materialintro.view.MaterialIntroView;
 
 public class ScanToolActivity extends AppCompatActivity implements CameraScanner.CameraListener, TextureView.SurfaceTextureListener, GraphicDecoder.DecodeListener, View.OnClickListener {
 
@@ -54,7 +59,7 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
     private CameraScanner mCameraScanner;
     protected GraphicDecoder mGraphicDecoder;
     protected String TAG = "XCodeScanner";
-    private Button mButton_Flash;
+    private ImageButton mButton_Flash;
     private int[] mCodeType;
 
     TextView sc_text;
@@ -92,8 +97,6 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
 
         mButton_Flash = findViewById(R.id.btn_flash);
         mButton_Flash.setOnClickListener(this);
-        sc_text = findViewById(R.id.textView3);
-        sc_card = findViewById(R.id.sc_card);
 
 
         resdia = new AlertDialog.Builder(this).setTitle("结果").setMessage("正在过滤数据")
@@ -116,7 +119,17 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
             mCameraScanner = new OldCameraScanner(this);
         }
 
+        int checkResult1 = getApplicationContext().checkCallingOrSelfPermission(Manifest.permission.CAMERA);
+        //if(!=允许),抛出异常
+        if (checkResult1 == PackageManager.PERMISSION_GRANTED) {
+            IntroView(mScannerFrameView, "2", "这里是扫描区域哦", new MaterialIntroListener() {
+                @Override
+                public void onUserClicked(String materialIntroViewId) {
+                    IntroView(mButton_Flash, "1", "这里是开启闪光灯的哦",null);
+                }
+            });
 
+        }
     }
 
     @Override
@@ -428,17 +441,40 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
 
             case R.id.btn_flash: {
                 if (v.isSelected()) {
-                    ((Button) v).setText("开灯");
+                    ((ImageButton) v).setImageDrawable(getDrawable(R.drawable.ic_flash_on_black_50dp));
                     v.setSelected(false);
                     mCameraScanner.closeFlash();
                 } else {
-                    ((Button) v).setText("关灯");
+                    ((ImageButton) v).setImageDrawable(getDrawable(R.drawable.ic_flash_off_black_50dp));
                     v.setSelected(true);
                     mCameraScanner.openFlash();
                 }
                 break;
             }
         }
+    }
+
+
+    private void IntroView(View v, String id, String text, MaterialIntroListener listener) {
+
+        MaterialIntroView.Builder miv = new MaterialIntroView.Builder(this)
+                .enableDotAnimation(false)
+                .enableIcon(true)
+                .setFocusGravity(FocusGravity.CENTER)
+                .setFocusType(Focus.ALL)
+                .setDelayMillis(200)
+                .setTargetPadding(30)
+                .enableFadeAnimation(true)
+                .performClick(false)
+                .setInfoText(text)
+                .setTarget(v)
+                .setUsageId(id); //THIS SHOULD BE UNIQUE ID
+
+        if (listener != null) {
+            miv.setListener(listener);
+        }
+        miv.show();
+
     }
 
 

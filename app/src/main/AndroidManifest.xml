@@ -73,6 +73,7 @@
             </intent-filter>
         </activity> <!-- 其他 -->
         <activity
+            android:windowSoftInputMode="stateHidden"
             android:name=".TextQRActivity"
             android:label="二维码生成" />
         <activity
@@ -142,7 +143,21 @@
             android:label="GIF二维码制作" />
         <activity android:name=".MoreActivity"
             android:label="批量生成二维码"
+            android:windowSoftInputMode="stateHidden"
             />
+
+        <!-- 访问文件权限 -->
+        <provider android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.dabai.qrtools.fileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+
     </application>
 
 </manifest>

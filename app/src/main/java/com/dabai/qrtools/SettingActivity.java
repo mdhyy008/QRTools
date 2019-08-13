@@ -98,7 +98,6 @@ public class SettingActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pre_setting);
-        zuzhi();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -175,97 +174,7 @@ public class SettingActivity extends PreferenceActivity {
     }
 
 
-    String text1 = null;
 
-
-    public void zuzhi() {
-        /**
-         * 阻止手机行为
-         */
-
-
-        models = new ArrayList<>();
-
-        //进行网络检测黑名单
-        //然后进行阻止机型
-
-        /**
-         * 线程部分开始
-         */
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                subtext = new StringBuffer();
-                URL suburl = null;
-                try {
-                    suburl = new URL("http://dabai2030.usa3v.net/QRTOOLS_MODELS.html");
-                } catch (MalformedURLException e) {
-                }
-
-                try {
-                    br = new BufferedReader(new InputStreamReader(suburl.openStream()));
-                    data = new char[1024];
-                    String dataz = null;
-                    while (br.read(data) != -1) {
-                        dataz = String.valueOf(data);
-                        text1 += dataz;
-                    }
-                    br.close();
-
-                    text1 = text1.replace("null", "");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            String[] text2 = text1.split(",");
-                            for (String a : text2) {
-
-                                // Log.d(TAG, "关键字禁止机型:" + a + " - " + Build.MODEL);
-
-                                if (Build.MODEL.contains(a)) {
-                                    AlertDialog ad = new AlertDialog.Builder(SettingActivity.this)
-                                            .setCancelable(false)
-                                            .setTitle("阻止行为")
-                                            .setMessage("由于有一些定制系统尚未适配，正如你当前使用的" + Build.MODEL + "无法使用部分功能")
-                                            .setPositiveButton("允许阻止", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Preference sc = getPreferenceManager().findPreference("screenshot_monitor");
-                                                    Preference clip = getPreferenceManager().findPreference("clip_monitor");
-
-                                                    sc.setSummary("已被禁用");
-                                                    clip.setSummary("已被禁用");
-
-                                                    sc.setEnabled(false);
-                                                    clip.setEnabled(false);
-                                                }
-                                            })
-                                            .show();
-
-                                    Window window = ad.getWindow();//对话框窗口
-                                    window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
-                                    window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
-                                    break;
-
-                                }
-
-
-                            }
-                        }
-                    });
-                } catch (IOException e) {
-
-                }
-            }
-        }).start();
-
-
-        /**
-         * 线程部分结束
-         */
-
-    }
 
 
     @Override
@@ -279,11 +188,28 @@ public class SettingActivity extends PreferenceActivity {
                 AlertDialog ad = new AlertDialog.Builder(this).setCancelable(false).setTitle("必须权限").setMessage("1·通知栏权限\n2·显示在其他应用上层(悬浮窗权限)").setPositiveButton("授权", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent mIntent = new Intent();
-                        mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        mIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-                        mIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
-                        context.startActivity(mIntent);
+
+                        try {
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                    Uri.parse("package:" + getPackageName()));
+                            startActivity(intent);
+                        } catch (Exception e) {
+
+                            try {
+                                /**
+                                 * 跳转程序信息
+                                 */
+                                Intent mIntent = new Intent();
+                                mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                mIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                                mIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+                                context.startActivity(mIntent);
+                            } catch (Exception e1) {
+                                Toast.makeText(context, "定制系统限制：自己手动开启吧", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+
                     }
                 }).setNeutralButton("不用了", new DialogInterface.OnClickListener() {
                     @Override
@@ -441,7 +367,7 @@ public class SettingActivity extends PreferenceActivity {
                 startActivity(new Intent(this, FeedBack.class));
                 break;
             case "other_help":
-                new DabaiUtils().openLink(this, "https://github.com/dabai2017/QRTools/blob/master/HELP.md");
+                new DabaiUtils().openLink(this, "https://github.com/dabai2017/MyStorage/blob/master/qrt_help.md");
                 break;
             case "other_version":
 
@@ -488,7 +414,7 @@ public class SettingActivity extends PreferenceActivity {
 
                 break;
             case "other_about":
-                new DabaiUtils().openLink(this, "https://github.com/dabai2017/QRTools/blob/master/ABOUT.md");
+                new DabaiUtils().openLink(this, "https://github.com/dabai2017/MyStorage/blob/master/qrt_about.md");
                 break;
             case "clip_monitor":
                 boolean clip_monitor = preference.getSharedPreferences().getBoolean("clip_monitor", false);

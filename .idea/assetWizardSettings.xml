@@ -134,7 +134,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/device/ic_dvr_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_flash_off_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -144,8 +144,11 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_create" />
+                            <entry key="height" value="50" />
+                            <entry key="outputName" value="ic_flash_off_black_50dp" />
+                            <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\Baymax\Desktop\生成会员卡.svg" />
+                            <entry key="width" value="50" />
                           </map>
                         </option>
                       </PersistentState>
