@@ -122,12 +122,9 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
         int checkResult1 = getApplicationContext().checkCallingOrSelfPermission(Manifest.permission.CAMERA);
         //if(!=允许),抛出异常
         if (checkResult1 == PackageManager.PERMISSION_GRANTED) {
-            IntroView(mScannerFrameView, "2", "这里是扫描区域哦", new MaterialIntroListener() {
-                @Override
-                public void onUserClicked(String materialIntroViewId) {
-                    IntroView(mButton_Flash, "1", "这里是开启闪光灯的哦",null);
-                }
-            });
+
+          IntroView(mButton_Flash, "1", "这里是开启闪光灯的哦",null);
+
 
         }
     }

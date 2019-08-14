@@ -74,6 +74,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Notification.EXTRA_CHANNEL_ID;
+import static android.provider.Settings.EXTRA_APP_PACKAGE;
+
 @SuppressWarnings("deprecation")
 public class SettingActivity extends PreferenceActivity {
 
@@ -92,6 +95,7 @@ public class SettingActivity extends PreferenceActivity {
     private List<String> photos_all;
 
     View dia_pro_view;
+
 
 
     @Override
@@ -173,10 +177,7 @@ public class SettingActivity extends PreferenceActivity {
 
     }
 
-
-
-
-
+    AlertDialog adpro;
     @Override
     protected void onResume() {
         super.onResume();
@@ -185,29 +186,44 @@ public class SettingActivity extends PreferenceActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!NotificationManagerCompat.from(context).areNotificationsEnabled() || !Settings.canDrawOverlays(this)) {
 
-                AlertDialog ad = new AlertDialog.Builder(this).setCancelable(false).setTitle("必须权限").setMessage("1·通知栏权限\n2·显示在其他应用上层(悬浮窗权限)").setPositiveButton("授权", new DialogInterface.OnClickListener() {
+                adpro = new AlertDialog.Builder(this).setCancelable(false).setTitle("需要申请以下权限").setPositiveButton("去授权", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        try {
-                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                    Uri.parse("package:" + getPackageName()));
-                            startActivity(intent);
-                        } catch (Exception e) {
+                        if (!Settings.canDrawOverlays(context)) {
 
                             try {
-                                /**
-                                 * 跳转程序信息
-                                 */
-                                Intent mIntent = new Intent();
-                                mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                mIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-                                mIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
-                                context.startActivity(mIntent);
-                            } catch (Exception e1) {
-                                Toast.makeText(context, "定制系统限制：自己手动开启吧", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                        Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                toAppInfo();
                             }
+                            return;
+                        }
 
+                        if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+                            try {
+                                // 根据isOpened结果，判断是否需要提醒用户跳转AppInfo页面，去打开App通知权限
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+
+                                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+                                    //这种方案适用于 API 26, 即8.0（含8.0）以上可以用
+                                    intent.putExtra(EXTRA_APP_PACKAGE, getPackageName());
+                                    intent.putExtra(EXTRA_CHANNEL_ID, getApplicationInfo().uid);
+                                }
+
+                                if (Build.VERSION.SDK_INT > 21 && Build.VERSION.SDK_INT < 25) {
+                                    //这种方案适用于 API21——25，即 5.0——7.1 之间的版本可以使用
+                                    intent.putExtra("app_package", getPackageName());
+                                    intent.putExtra("app_uid", getApplicationInfo().uid);
+                                }
+
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                toAppInfo();
+                            }
                         }
 
                     }
@@ -216,9 +232,18 @@ public class SettingActivity extends PreferenceActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
-                }).show();
+                }).create();
 
-                Window window = ad.getWindow();//对话框窗口
+                StringBuffer sb = new StringBuffer();
+                if (!Settings.canDrawOverlays(context)){
+                    sb.append("\n- 悬浮窗权限");
+                }
+                if (!NotificationManagerCompat.from(context).areNotificationsEnabled()){
+                    sb.append("\n- 通知栏权限");
+                }
+                adpro.setMessage(sb.toString());
+                adpro.show();
+                Window window = adpro.getWindow();//对话框窗口
                 window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
                 window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
 
@@ -226,6 +251,21 @@ public class SettingActivity extends PreferenceActivity {
             }
         }
 
+    }
+
+    private void toAppInfo() {
+        try {
+            /**
+             * 跳转程序信息
+             */
+            Intent mIntent = new Intent();
+            mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            mIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+            context.startActivity(mIntent);
+        } catch (Exception e1) {
+            Toast.makeText(context, "定制系统限制：自己手动开启吧", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -543,7 +583,7 @@ public class SettingActivity extends PreferenceActivity {
 
                                 } else {
                                     Toast to = Toast.makeText(context, "没有设置屏幕锁，跳过验证", Toast.LENGTH_SHORT);
-                                    to.setGravity(Gravity.CENTER,0,0);
+                                    to.setGravity(Gravity.CENTER, 0, 0);
                                     to.show();
                                     two_ok();
 
@@ -684,7 +724,7 @@ public class SettingActivity extends PreferenceActivity {
                         new QrCodeAsyncTask().execute(bitmap);
 
 
-                        if (total < 30){
+                        if (total < 30) {
 
                             //休息一秒
                             try {
@@ -692,7 +732,7 @@ public class SettingActivity extends PreferenceActivity {
                             } catch (InterruptedException e) {
                             }
 
-                        }else {
+                        } else {
 
                             //休息一秒
                             try {
