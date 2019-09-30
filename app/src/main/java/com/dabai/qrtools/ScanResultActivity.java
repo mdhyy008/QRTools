@@ -67,6 +67,11 @@ public class ScanResultActivity extends AppCompatActivity {
         }
 
         restext = result;
+
+        if (restext.startsWith("funny:")){
+            Toast.makeText(this, "滑稽控链接，可直接用浏览器打开", Toast.LENGTH_LONG).show();
+        }
+
         cons = findViewById(R.id.cons);
         tv_res = findViewById(R.id.result_text);
         tv_res.setText(result);
@@ -97,7 +102,7 @@ public class ScanResultActivity extends AppCompatActivity {
         }
 
 
-        if (restext.contains("http") || restext.contains("ftp")) {
+        if (restext.contains("http") || restext.contains("ftp") || restext.contains("funny:") || restext.startsWith("dabai:")) {
             cd2.setVisibility(View.VISIBLE);
         }
 
@@ -179,7 +184,7 @@ public class ScanResultActivity extends AppCompatActivity {
     //打开链接
     public void res_openlink(View view) {
 
-        if (restext.startsWith("http")) {
+        if (restext.startsWith("http")||restext.startsWith("funny")||restext.startsWith("dabai:")) {
             //浏览器
             new DabaiUtils().openLink(this, restext);
         } else {

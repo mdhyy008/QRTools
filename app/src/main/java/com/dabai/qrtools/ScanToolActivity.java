@@ -400,20 +400,21 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
     public void decodeComplete(String result, int type, int quality, int requestCode) {
         if (result == null) return;
         if (result.equals(mResult)) {
+            if (!resdia.isShowing()) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        vibrator.vibrate(100);
+                    }
+                }).start();
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    vibrator.vibrate(100);
-                }
-            }).start();
+                resdia.show();
 
-            resdia.show();
+                Window window = resdia.getWindow();//对话框窗口
+                window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
+                window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
 
-            Window window = resdia.getWindow();//对话框窗口
-            window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
-            window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
-
+            }
             if (++mCount > 1) {//连续四次相同则显示结果（主要过滤脏数据，也可以根据条码类型自定义规则）
                 if (quality < 10) {
                     result_end = result;
