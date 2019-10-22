@@ -158,41 +158,10 @@
                     android:onClick="res_saveman"
                     android:layout_marginLeft="1dp"
                     android:text="保存到已有联系人"
-                    android:visibility="gone" />
+               />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-
-
-        <!--识别到的内容，来指定打开方式-->
-        <android.support.v7.widget.CardView
-            android:id="@+id/cd4"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:textSize="13sp"
-                    android:text="这是联系人信息? 微信扫描立即添加" />
-
-                <Button
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="res_openwx"
-                    android:text="微信扫一扫" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
 
 
         <!--识别到的内容，来指定打开方式-->
