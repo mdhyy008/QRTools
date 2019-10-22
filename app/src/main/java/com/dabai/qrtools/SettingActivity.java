@@ -1,14 +1,8 @@
 package com.dabai.qrtools;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
@@ -17,37 +11,28 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.Icon;
-import android.hardware.biometrics.BiometricPrompt;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.CancellationSignal;
-import android.os.Parcelable;
+import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -66,11 +51,6 @@ import com.google.zxing.qrcode.QRCodeReader;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +64,7 @@ public class SettingActivity extends PreferenceActivity {
 
     private Context context;
     Intent clipintent, scintent;
-    String TAG = "dabai";
+    String TAG = "dabaizzz";
     private ArrayList<String> models;
 
     //网络组件
@@ -95,7 +75,6 @@ public class SettingActivity extends PreferenceActivity {
     private List<String> photos_all;
 
     View dia_pro_view;
-
 
 
     @Override
@@ -117,13 +96,18 @@ public class SettingActivity extends PreferenceActivity {
         //三个复选框
         final Preference customtabs = getPreferenceManager().findPreference("isChrome");
         final Preference clip = getPreferenceManager().findPreference("clip_monitor");
+        final Preference sc = getPreferenceManager().findPreference("screenshot_monitor");
         final Preference installshort = getPreferenceManager().findPreference("program_shortcuts");
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P + 1) {
             clip.setEnabled(false);
+            clip.setSummary("此Android版本不支持");
         }
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            sc.setEnabled(false);
+            sc.setSummary("此Android版本不支持");
+        }
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
             clip.setEnabled(false);
         }
@@ -131,10 +115,9 @@ public class SettingActivity extends PreferenceActivity {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             installshort.setEnabled(false);
+            installshort.setSummary("此Android版本不支持");
         }
 
-
-        final Preference sc = getPreferenceManager().findPreference("screenshot_monitor");
 
         //change preference version name;
         ver.setSummary(new DabaiUtils().getVersionName(getApplicationContext()));
@@ -178,6 +161,7 @@ public class SettingActivity extends PreferenceActivity {
     }
 
     AlertDialog adpro;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -235,10 +219,10 @@ public class SettingActivity extends PreferenceActivity {
                 }).create();
 
                 StringBuffer sb = new StringBuffer();
-                if (!Settings.canDrawOverlays(context)){
+                if (!Settings.canDrawOverlays(context)) {
                     sb.append("\n- 悬浮窗权限");
                 }
-                if (!NotificationManagerCompat.from(context).areNotificationsEnabled()){
+                if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) {
                     sb.append("\n- 通知栏权限");
                 }
                 adpro.setMessage(sb.toString());
@@ -246,8 +230,6 @@ public class SettingActivity extends PreferenceActivity {
                 Window window = adpro.getWindow();//对话框窗口
                 window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
                 window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
-
-
             }
         }
 
@@ -398,7 +380,7 @@ public class SettingActivity extends PreferenceActivity {
                     Uri content_url = Uri.parse("alipayqr://platformapi/startapp?saId=10000007&qrcode=HTTPS://QR.ALIPAY.COM/FKX08574RJXQHHF1SRRFIB2");
                     intent.setData(content_url);
                     startActivity(intent);
-                    Toast.makeText(context, "嘿嘿😀", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "谢谢支持😀", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     Toast.makeText(context, "调起支付宝失败！", Toast.LENGTH_SHORT).show();
                 }
@@ -407,7 +389,7 @@ public class SettingActivity extends PreferenceActivity {
                 startActivity(new Intent(this, FeedBack.class));
                 break;
             case "other_help":
-                new DabaiUtils().openLink(this, "https://github.com/dabai2017/MyStorage/blob/master/qrt_help.md");
+                new DabaiUtils().openLink(this, "https://github.com/dabai2017/MyStorage/blob/master/qrt_help.md#主界面");
                 break;
             case "other_version":
 
@@ -427,8 +409,6 @@ public class SettingActivity extends PreferenceActivity {
                                 } else {
                                     Toast.makeText(context, "您的系统中没有安装应用市场", Toast.LENGTH_SHORT).show();
                                 }
-
-
                             }
                         })
                         .show();
@@ -454,7 +434,7 @@ public class SettingActivity extends PreferenceActivity {
 
                 break;
             case "other_about":
-                new DabaiUtils().openLink(this, "https://github.com/dabai2017/MyStorage/blob/master/qrt_about.md");
+                new DabaiUtils().openLink(this, "https://github.com/dabai2017/MyStorage/blob/master/qrt_about.md#二维码工具---qrt");
                 break;
             case "clip_monitor":
                 boolean clip_monitor = preference.getSharedPreferences().getBoolean("clip_monitor", false);
@@ -681,7 +661,7 @@ public class SettingActivity extends PreferenceActivity {
                         speed = 200;
                         break;
                     case 2:
-                        speed = 100;
+                        speed = 50;
                         break;
                 }
             }
@@ -723,17 +703,14 @@ public class SettingActivity extends PreferenceActivity {
                         up_path = photo;
                         new QrCodeAsyncTask().execute(bitmap);
 
-
                         if (total < 30) {
-
                             //休息一秒
                             try {
-                                Thread.sleep(700);
+                                Thread.sleep(400);
                             } catch (InterruptedException e) {
                             }
 
                         } else {
-
                             //休息一秒
                             try {
                                 Thread.sleep(speed);
@@ -847,11 +824,10 @@ public class SettingActivity extends PreferenceActivity {
                         //当然，我们的要求是如果没打开就不获取了，要不然跳转会影响用户的体验
                         if (!isSecurityPermissionOpen(context)) {
 
-
                             //此处是跳转安全权限的跳转代码，如果你判断用户没有开启权限的话可以选择跳转，此处标明~~~
                             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
-
 
                         } else {
                             Toast.makeText(context, "已经成功授权", Toast.LENGTH_SHORT).show();
@@ -862,6 +838,7 @@ public class SettingActivity extends PreferenceActivity {
 
 
                 } catch (Exception e) {
+                    Log.d(TAG, "onClick: " + e);
                     Toast.makeText(context, "授权失败,请手动开启", Toast.LENGTH_SHORT).show();
                 }
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <stroke
+                android:width="2dp"
+                android:color="#000000"
+                android:dashGap="3dp"
+                android:dashWidth="3dp" />
+        </shape>
+    </item>
+
+    <!--设置只有底部有边框-->
+    <item android:bottom="3dp" android:top="3dp">
+        <shape>
+            <solid android:color="#ffffff" />
+        </shape>
+    </item>
+</layer-list>

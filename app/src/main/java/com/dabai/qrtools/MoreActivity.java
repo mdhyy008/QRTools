@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -105,7 +106,6 @@ public class MoreActivity extends AppCompatActivity {
                 }
 
                 f5();
-
             }
         });
 
@@ -113,7 +113,7 @@ public class MoreActivity extends AppCompatActivity {
          * init()
          */
         init();
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
     }
 
@@ -127,6 +127,7 @@ public class MoreActivity extends AppCompatActivity {
      * 初始化
      */
     private void init() {
+
         lv = findViewById(R.id.lv);
         lvnum = findViewById(R.id.lvnum);
 
@@ -197,7 +198,10 @@ public class MoreActivity extends AppCompatActivity {
 
     public void see_all() {
 
-        hideInput();
+        try {
+            hideInput();
+        } catch (Exception e) {
+        }
 
         dia_more.dismiss();
 
@@ -326,7 +330,7 @@ public class MoreActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    public void hideInput() {
+    public void hideInput() throws Exception{
         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 

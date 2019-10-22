@@ -64,6 +64,16 @@
             android:key="other_feedback"
             android:summary="快速发送反馈信息到开发者微信"
             android:title="反馈问题" />
+        <PreferenceScreen
+            android:icon="@mipmap/alipay"
+            android:key="other_pay"
+            android:summary="可以捐赠一下咩?👻"
+            android:title="捐赠"
+            />
+        <PreferenceScreen
+            android:icon="@mipmap/fx"
+            android:key="other_share"
+            android:title="分享" />
 
         <PreferenceScreen
             android:icon="@mipmap/ls"
@@ -79,16 +89,6 @@
             android:key="other_about"
             android:title="关于" />
 
-        <PreferenceScreen
-            android:icon="@mipmap/alipay"
-            android:key="other_pay"
-            android:summary="可以捐赠一下咩?👻"
-            android:title="捐赠"
-            />
-        <PreferenceScreen
-            android:icon="@mipmap/fx"
-            android:key="other_share"
-            android:title="分享" />
 
     </PreferenceCategory>
 

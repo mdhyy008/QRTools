@@ -37,12 +37,16 @@ public class FeedBack extends Activity {
         tv.setText("反馈内容");
         tv.setPadding(20,20,20,20);
         ed1 = new EditText(this);
-        ed1.setMaxLines(5);
-        ed1.setLines(5);
+        ed1.setMaxLines(8);
+        ed1.setMinLines(5);
         ed1.setGravity(Gravity.TOP);
+        ed1.setBackground(getDrawable(R.drawable.edit_shape));
+        ed1.setPadding(10,10,10,10);
 
         bu = new Button(this);
         ed1.setHint("请输入要反馈的问题");
+
+
         bu.setText("发送反馈");
         ll1.addView(tv);
         ll1.addView(ed1);

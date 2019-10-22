@@ -8,6 +8,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +28,7 @@ import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,6 +77,7 @@ public class TextQRActivity extends AppCompatActivity {
     private int QRColor, QRBackColor = Color.WHITE;
 
     boolean is_rad = true;
+    private String TAG = "dabaizzz";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,32 +107,44 @@ public class TextQRActivity extends AppCompatActivity {
 
         edit = til.getEditText();
 
-        final CardView imgcard = findViewById(R.id.QR_create_imgcard);
+        CardView imgcard = findViewById(R.id.QR_create_imgcard);
+
+        //qr生成图的单击事件
+
 
         imgcard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    hideInput();
+                } catch (Exception e) {
+                }
 
 
-                if (is_rad) {
+      /*          if (is_rad) {
                     if (!edit.getText().toString().isEmpty()) {
                         QRColor = Color.parseColor(DabaiUtils.getRandColorCode());
                         Bitmap bit = createQRCodeBitmap(edit.getText().toString(), 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
                         img.setImageBitmap(bit);
-                        hideInput();
+
                     } else {
                         Toast.makeText(TextQRActivity.this, "没有文本", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(TextQRActivity.this, "二维码颜色现在不能随机", Toast.LENGTH_SHORT).show();
                 }
+                */
+
             }
         });
 
         imgcard.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                hideInput();
+                try {
+                    hideInput();
+                } catch (Exception e) {
+                }
 
                 final String[] items1 = {"添加标题"};
                 final String[] items2 = {"添加图标", "添加标题", "二维码颜色", "二维码背景色", "恢复默认"};
@@ -163,7 +178,10 @@ public class TextQRActivity extends AppCompatActivity {
 
                                                                 Bitmap bit = createQRCodeBitmap(edit.getText().toString(), 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
                                                                 img.setImageBitmap(bit);
-                                                                hideInput();
+                                                                try {
+                                                                    hideInput();
+                                                                } catch (Exception e) {
+                                                                }
                                                                 break;
                                                         }
                                                     }
@@ -195,7 +213,10 @@ public class TextQRActivity extends AppCompatActivity {
                                                         Bitmap bit = createQRCodeBitmap(edit.getText().toString(), 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
                                                         img.setImageBitmap(bit);
                                                         is_rad = false;
-                                                        hideInput();
+                                                        try {
+                                                            hideInput();
+                                                        } catch (Exception e) {
+                                                        }
                                                     }
                                                 })
                                                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -226,7 +247,10 @@ public class TextQRActivity extends AppCompatActivity {
                                                         QRBackColor = selectedColor;
                                                         Bitmap bit = createQRCodeBitmap(edit.getText().toString(), 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
                                                         img.setImageBitmap(bit);
-                                                        hideInput();
+                                                        try {
+                                                            hideInput();
+                                                        } catch (Exception e) {
+                                                        }
                                                     }
                                                 })
                                                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -246,22 +270,6 @@ public class TextQRActivity extends AppCompatActivity {
                                         PictureSelector
                                                 .create(TextQRActivity.this, PictureSelector.SELECT_REQUEST_CODE)
                                                 .selectPicture(true, 200, 200, 1, 1);
-
-                                        /*
-                                //图库选择图片路径  全屏
-                                 new RxImagePicker.Builder()
-                                        .with(TextQRActivity.this)
-                                        .build()
-                                        .create(MyImagePicker.class)
-                                        .openGallery()
-                                        .subscribe(new Consumer<File>() {
-                                            @Override
-                                            public void accept(File file) {
-                                                Toast.makeText(TextQRActivity.this, "" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-
-                                */
 
                                         break;
                                     case "添加标题":
@@ -330,6 +338,8 @@ public class TextQRActivity extends AppCompatActivity {
 
         if (downlink != null) {
             edit.setText(downlink);
+        }else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
     }
@@ -364,8 +374,6 @@ public class TextQRActivity extends AppCompatActivity {
 
                 CardView icrcard = findViewById(R.id.icrcard);
                 icrcard.setVisibility(View.VISIBLE);
-
-
             }
         }
     }
@@ -385,14 +393,17 @@ public class TextQRActivity extends AppCompatActivity {
                 sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
 
                 Snackbar.make(cons, "保存" + file.getAbsolutePath() + "成功", Snackbar.LENGTH_SHORT).show();
-                hideInput();
 
             } else {
                 Snackbar.make(cons, "现在不能保存", Snackbar.LENGTH_SHORT).show();
-                hideInput();
             }
         } catch (Exception e) {
             Toast.makeText(this, "保存失败", Toast.LENGTH_SHORT).show();
+        }
+
+        try {
+            hideInput();
+        } catch (Exception e) {
         }
 
     }
@@ -446,7 +457,7 @@ public class TextQRActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    public void hideInput() {
+    public void hideInput() throws Exception{
         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
@@ -517,7 +528,10 @@ public class TextQRActivity extends AppCompatActivity {
 
 
     public void hide_input(View view) {
-        hideInput();
+        try {
+            hideInput();
+        } catch (Exception e) {
+        }
     }
 
 
@@ -555,7 +569,7 @@ public class TextQRActivity extends AppCompatActivity {
 
     public void see_all(View view) {
 
-        imageView = (ImageView) findViewById(R.id.image_view);
+        imageView =  findViewById(R.id.image_view);
 
         //展示在dialog上面的大图
         dialog = new Dialog(TextQRActivity.this, android.R.style.Theme_NoTitleBar_Fullscreen);

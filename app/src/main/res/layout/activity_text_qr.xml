@@ -45,9 +45,9 @@
                             android:layout_height="wrap_content"
                             android:hint="请输入文本或链接"
                             android:maxLines="7"
+                            android:gravity="top"
                             />
                     </android.support.design.widget.TextInputLayout>
-
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>

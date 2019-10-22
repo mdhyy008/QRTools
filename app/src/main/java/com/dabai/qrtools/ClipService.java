@@ -34,7 +34,7 @@ public class ClipService extends Service {
     ClipboardManager cb;
     private ClipboardManager.OnPrimaryClipChangedListener cl;
 
-    String TAG = "dabai";
+    String TAG = "dabaizzz";
     String text;
 
     public ClipService() {
@@ -57,8 +57,6 @@ public class ClipService extends Service {
         } catch (Exception e) {
 
         }
-
-
     }
 
 
@@ -71,6 +69,7 @@ public class ClipService extends Service {
         cl = new ClipboardManager.OnPrimaryClipChangedListener() {
             @Override
             public void onPrimaryClipChanged() {
+
 
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
                     android.text.ClipboardManager cb = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -96,8 +95,6 @@ public class ClipService extends Service {
                     window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
 
                 } else {
-
-                    //sendNotification("1", "剪切板监听结果^跳转Clip活动", "检测到剪切板有新活动", "点击生成并查看二维码", text);
 
                     AlertDialog ad = new AlertDialog.Builder(getApplicationContext()).setCancelable(false).setTitle("剪切板监听").setMessage("剪切板内容:\n{\n" + (text.length() > 50 ? text.substring(0, 50) + "..." : text) + "\n}\n,是否生成二维码查看?")
                             .setPositiveButton("生成", new DialogInterface.OnClickListener() {
@@ -265,53 +262,6 @@ public class ClipService extends Service {
         super.onDestroy();
     }
 
-    @TargetApi(Build.VERSION_CODES.O)
-    public void sendNotification(String channelID, String channelName, String subText, String title, String text) {
-        NotificationManager manager;
-        manager = (NotificationManager) this.getSystemService(this.getApplicationContext().NOTIFICATION_SERVICE);
-
-
-        try {
-            //创建通道管理器
-            NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-            manager.createNotificationChannel(channel);
-        } catch (Exception e) {
-
-        }
-
-        Notification.Builder builder = new Notification.Builder(getApplicationContext());
-        //设置小图标
-        builder.setSmallIcon(R.drawable.ic_stat_name);
-        //设置通知 标题，内容，小标题
-        builder.setContentTitle(title);
-
-        if (text.length() > 10) {
-            builder.setContentText("部分内容:" + text.substring(0, 10) + "...");
-        } else {
-            builder.setContentText("内容:" + text);
-        }
-
-        builder.setSubText(subText);
-        //设置通知颜色
-        builder.setColor(Color.parseColor("#1565C0"));
-        //设置创建时间
-        builder.setWhen(System.nanoTime());
-
-
-        try {
-            //创建通知时指定channelID
-            builder.setChannelId(channelID);
-        } catch (Exception e) {
-
-        }
-
-        Intent resultIntent = new Intent(this, ClipActivity.class);
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(resultPendingIntent);
-        Notification notification = builder.build();
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        manager.notify(200, notification);
-    }
 
 
     @Override

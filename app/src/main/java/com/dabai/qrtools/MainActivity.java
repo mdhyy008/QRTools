@@ -1,13 +1,9 @@
 package com.dabai.qrtools;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -17,9 +13,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -28,12 +21,9 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -50,6 +40,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dabai.qrtools.activity.WIFIandroid;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,9 +49,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 
 /**
@@ -95,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     //特效 duang
     boolean add = true;
     float alpha = 0;
-    private String TAG = "dabai";
+    private String TAG = "dabaizzz";
     private int REQUEST_CODE_SCAN = 100;
     private boolean clip_monitor, easy, screenshot_monitor;
     private Intent screenintent, clipintent;
@@ -206,12 +195,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+/*
 //检测Android版本隐藏功能
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P + 1) {
             CardView get_clip = findViewById(R.id.get_clip);
             get_clip.setVisibility(View.GONE);
 
         }
+*/
 
 
     }
@@ -291,20 +282,20 @@ public class MainActivity extends AppCompatActivity {
         try {
 
 
-        // 扫描二维码/条码回传
-        if (requestCode == 5 && resultCode == RESULT_OK) {
-            if (data != null) {
+            // 扫描二维码/条码回传
+            if (requestCode == 5 && resultCode == RESULT_OK) {
+                if (data != null) {
 
-                Uri uri = data.getData();
-                String[] contacts = getPhoneContacts(uri);
-                Intent intent = new Intent(this, VcfResultActivity.class);
-                intent.putExtra("name", contacts[0]);
-                intent.putExtra("phoneNumber", contacts[1]);
-                startActivity(intent);
+                    Uri uri = data.getData();
+                    String[] contacts = getPhoneContacts(uri);
 
+                    String content = "BEGIN:VCARD\n" + "VERSION:3.0\n" + "N:" + contacts[0] + "\n" + "TEL:" + contacts[1] + "\n" + "NOTE:QRTools Share\n" + "END:VCARD";
+
+                    ToRes(content);
+
+                }
             }
-        }
-    }catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(context, "不可预知错误发生了", Toast.LENGTH_SHORT).show();
         }
 
@@ -436,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
     public void wifi_config(View view) {
 
         final AlertDialog ad = new AlertDialog.Builder(this).setTitle("分享WiFi")
-                .setItems(new String[]{"手动生成分享码", "历史连接记录"}, new DialogInterface.OnClickListener() {
+                .setItems(new String[]{"手动生成分享码", "自动获取WiFi列表", "历史连接记录"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (i) {
@@ -455,7 +446,13 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                                 break;
+
                             case 1:
+
+                                suthread();
+
+                                break;
+                            case 2:
 
 
                                 final View view2 = LayoutInflater.from(context).inflate(R.layout.dialog_wifihistory, null);
@@ -601,6 +598,7 @@ public class MainActivity extends AppCompatActivity {
 
     void ToRes(String text) {
         Intent resultIntent = new Intent(MainActivity.this, TextQRActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         resultIntent.putExtra("download", text);
         startActivity(resultIntent);
 
@@ -625,7 +623,6 @@ public class MainActivity extends AppCompatActivity {
                                             try {
                                                 Runtime.getRuntime().exec("su");
                                             } catch (IOException e) {
-
                                             }
                                             suthread();
 
@@ -636,37 +633,8 @@ public class MainActivity extends AppCompatActivity {
                             window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
                             window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
 
-
                         } else {
-
-
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                        new shell().execCommand(new String[]{"cp /data/misc/wifi/WifiConfigStore.xml /sdcard/WifiConfigStore.xml"}, true);
-                                        try {
-                                            wificonfig = new FileUtils().readText("/sdcard/WifiConfigStore.xml");
-                                        } catch (IOException e) {
-
-                                        }
-                                    } else {
-                                        new shell().execCommand(new String[]{"cp /data/misc/wifi/wpa_supplicant.conf /sdcard/wpa_supplicant.conf"}, true);
-                                        try {
-                                            wificonfig = new FileUtils().readText("/sdcard/wpa_supplicant.conf");
-                                        } catch (IOException e) {
-
-                                        }
-                                    }
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            showWifi();
-                                        }
-                                    });
-                                }
-                            }).start();
+                            showWifi();
                         }
                     }
                 });
@@ -680,21 +648,20 @@ public class MainActivity extends AppCompatActivity {
     //显示wifi选择弹窗
     private void showWifi() {
 
+
         /**
-         * 这里需要处理数据
-         * 解析下WiFi配置信息
-         * 得到 ssid 和 password
+         * 判断需要跳转到哪个界面
          */
 
 
-        AlertDialog ad = new AlertDialog.Builder(MainActivity.this)
-                .setTitle("WIFI选择")
-                .setMessage(wificonfig)
-                .show();
+        if (Build.VERSION.SDK_INT >= 26) {
 
-        Window window = ad.getWindow();//对话框窗口
-        window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
-        window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
+            startActivity(new Intent(this, WIFIandroid.class));
+
+        } else {
+            startActivity(new Intent(this, WIFIandroid.class));
+        }
+
 
     }
 
@@ -702,7 +669,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isRoot() {
         try {
             Process process = Runtime.getRuntime().exec("su");
-            process.getOutputStream().write("exit\n" .getBytes());
+            process.getOutputStream().write("exit\n".getBytes());
             process.getOutputStream().flush();
 
             int i = process.waitFor();
@@ -743,10 +710,18 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            String text = "";
+            ContentResolver cr = getContentResolver();
+            ClipData clipdata = clip.getPrimaryClip();
 
-            text = clip.getText().toString();
-            ToRes(text);
+            if (clip != null) {
+
+                String text = null;
+
+                //从剪贴板数据中获取第一项
+                ClipData.Item item = clipdata.getItemAt(0);
+                text = item.coerceToText(this).toString();
+                ToRes(text);
+            }
 
         } catch (Exception e) {
             Toast.makeText(context, "剪切板异常:)", Toast.LENGTH_SHORT).show();
