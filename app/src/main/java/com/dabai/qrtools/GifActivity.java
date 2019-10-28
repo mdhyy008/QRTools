@@ -1,11 +1,12 @@
 package com.dabai.qrtools;
 
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class GifActivity extends AppCompatActivity {
 

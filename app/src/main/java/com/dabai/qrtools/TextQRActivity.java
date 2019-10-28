@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,14 +17,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -42,28 +36,43 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.dabai.qrtools.utils.AESUtils3;
+import com.dabai.qrtools.utils.DESUtil;
+import com.dabai.qrtools.utils.SymmetricEncoder;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.qingmei2.rximagepicker.core.RxImagePicker;
 import com.wildma.pictureselector.PictureSelector;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Random;
-
-import io.reactivex.functions.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TextQRActivity extends AppCompatActivity {
 
@@ -111,7 +120,6 @@ public class TextQRActivity extends AppCompatActivity {
 
         //qr生成图的单击事件
 
-
         imgcard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,22 +127,6 @@ public class TextQRActivity extends AppCompatActivity {
                     hideInput();
                 } catch (Exception e) {
                 }
-
-
-      /*          if (is_rad) {
-                    if (!edit.getText().toString().isEmpty()) {
-                        QRColor = Color.parseColor(DabaiUtils.getRandColorCode());
-                        Bitmap bit = createQRCodeBitmap(edit.getText().toString(), 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
-                        img.setImageBitmap(bit);
-
-                    } else {
-                        Toast.makeText(TextQRActivity.this, "没有文本", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(TextQRActivity.this, "二维码颜色现在不能随机", Toast.LENGTH_SHORT).show();
-                }
-                */
-
             }
         });
 
@@ -293,9 +285,7 @@ public class TextQRActivity extends AppCompatActivity {
                                             }
                                         });
                                         builder.show();
-
                                         break;
-
                                 }
                             }
                         }).show();
@@ -338,7 +328,7 @@ public class TextQRActivity extends AppCompatActivity {
 
         if (downlink != null) {
             edit.setText(downlink);
-        }else {
+        } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
@@ -457,7 +447,7 @@ public class TextQRActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    public void hideInput() throws Exception{
+    public void hideInput() throws Exception {
         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
@@ -569,7 +559,7 @@ public class TextQRActivity extends AppCompatActivity {
 
     public void see_all(View view) {
 
-        imageView =  findViewById(R.id.image_view);
+        imageView = findViewById(R.id.image_view);
 
         //展示在dialog上面的大图
         dialog = new Dialog(TextQRActivity.this, android.R.style.Theme_NoTitleBar_Fullscreen);
@@ -612,4 +602,148 @@ public class TextQRActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * 编码 转换utf8
+     *
+     * @param view
+     */
+    public void code_utf8(View view) {
+
+        String text = til.getEditText().getText().toString();
+        if (!text.isEmpty()) {
+            QRColor = Color.BLACK;
+            Bitmap bit = createQRCodeBitmap(text, 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+            img.setImageBitmap(bit);
+            isOK = true;
+            Snackbar.make(cons, "转换完成！", Snackbar.LENGTH_SHORT).show();
+
+        } else {
+            Snackbar.make(cons, "无内容，不生成", Snackbar.LENGTH_SHORT).show();
+        }
+        try {
+            hideInput();
+        } catch (Exception e) {
+        }
+    }
+
+    public void code_gbk(View view) {
+
+        String text = til.getEditText().getText().toString();
+        if (!text.isEmpty()) {
+            QRColor = Color.BLACK;
+            Bitmap bit = createQRCodeBitmap(text, 700, 700, "GBK", "H", "1", QRColor, QRBackColor);
+            img.setImageBitmap(bit);
+            isOK = true;
+            Snackbar.make(cons, "转换完成！", Snackbar.LENGTH_SHORT).show();
+
+        } else {
+            Snackbar.make(cons, "无内容，不生成", Snackbar.LENGTH_SHORT).show();
+        }
+        try {
+            hideInput();
+        } catch (Exception e) {
+        }
+    }
+
+    public void qr_ipset(View view) {
+        edit.setText("获取中...");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    HtmlUtils hu = new HtmlUtils();
+                    String html = hu.getHtml("https://www.mxnzp.com/api/ip/self");
+                    JSONObject jo = new JSONObject(html);
+                    JSONObject jo2 = new JSONObject(jo.getString("data"));
+                    final String ip = jo2.getString("ip");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            edit.setText("" + ip);
+                            Snackbar.make(cons, "获取完成！", Snackbar.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+                } catch (Exception e) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            edit.setText("网络异常...");
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+
+
+    /**
+     * 判断字符串中是否包含中文
+     * @param str
+     * 待校验字符串
+     * @return 是否为中文
+     * @warn 不能校验是否为中文标点符号
+     */
+    public static boolean isContainChinese(String str) {
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            return true;
+        }
+        return false;
+    }
+
+
+    String all_texttt;
+    public void qr_pass(View view) {
+
+        all_texttt = til.getEditText().getText().toString();
+
+        if (!all_texttt.isEmpty()) {
+
+            new MaterialDialog.Builder(this)
+                    .title("加密文本")
+                    .inputType(InputType.TYPE_CLASS_TEXT)
+                    .input("请输入密钥", null, new MaterialDialog.InputCallback() {
+                        @Override
+                        public void onInput(MaterialDialog dialog, CharSequence input) {
+
+                            if (!isContainChinese(input+"") && !(input+"").equals("")) {
+                                String txt = null;
+                                try {
+                                    txt = AESUtils3.encrypt(all_texttt,"" + input);
+                                } catch (Exception e) {
+                                }
+
+                                QRColor = Color.BLACK;
+                                Bitmap bit = createQRCodeBitmap(txt, 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+                                img.setImageBitmap(bit);
+                                isOK = true;
+                                Snackbar.make(cons, "加密完成！", Snackbar.LENGTH_SHORT).show();
+
+                            }else {
+                                Snackbar.make(cons, "无密钥或包含中文字符，不生成", Snackbar.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    })
+                    .positiveText("确定")
+                    .neutralText("取消")
+                    .show();
+
+        } else {
+            Snackbar.make(cons, "无内容，不生成", Snackbar.LENGTH_SHORT).show();
+        }
+
+        try {
+            hideInput();
+        } catch (Exception e) {
+        }
+
+    }
 }

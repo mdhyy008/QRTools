@@ -1,43 +1,43 @@
 package com.dabai.qrtools;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.hardware.biometrics.BiometricPrompt;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.dabai.qrtools.utils.AESUtils3;
+import com.dabai.qrtools.utils.DESUtil;
+import com.dabai.qrtools.utils.SymmetricEncoder;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class ScanResultActivity extends AppCompatActivity {
 
@@ -410,4 +410,62 @@ public class ScanResultActivity extends AppCompatActivity {
     }
 
 
+
+    /**
+     * 判断字符串中是否包含中文
+     * @param str
+     * 待校验字符串
+     * @return 是否为中文
+     * @warn 不能校验是否为中文标点符号
+     */
+    public static boolean isContainChinese(String str) {
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            return true;
+        }
+        return false;
+    }
+
+    String destxt;
+    public void res_pass(View view) {
+
+        new MaterialDialog.Builder(this)
+                .title("解密文本")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input("请输入密钥", null, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+
+
+                        try {
+                            destxt = AESUtils3.decrypt(restext,"" + input);
+                        } catch (Exception e) {
+                        }
+
+                        new MaterialDialog.Builder(ScanResultActivity.this)
+                                .title("解密结果")
+                                .content(""+destxt)
+                                .positiveText("复制")
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                        ClipboardManager clipboardManager = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                        ClipData mclipData = ClipData.newPlainText("Label", destxt);
+                                        clipboardManager.setPrimaryClip(mclipData);
+
+                                        Snackbar.make(cons, "复制成功", Snackbar.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .neutralText("关闭")
+                                .show();
+
+
+                    }
+                })
+                .positiveText("确定")
+                .neutralText("取消")
+                .show();
+    }
 }

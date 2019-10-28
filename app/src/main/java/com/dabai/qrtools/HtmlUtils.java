@@ -39,6 +39,64 @@ public class HtmlUtils
     public HtmlUtils(){
     }
 
+
+    //获取网站
+    public String getHtml(String link) throws Exception{
+
+        subtext = new StringBuffer();
+
+        URL suburl = new URL(link);
+
+        HttpURLConnection huc = (HttpURLConnection) suburl.openConnection();
+        System.out.println("打开连接..."+huc.getResponseMessage());
+        InputStream is = huc.getInputStream();
+        int len = 0;
+
+        byte data[]=new byte[1024];
+        System.out.println("开始读取");
+        while((len = is.read(data)) != -1){
+
+            subtext.append(new String(data,0,len));
+            //System.out.println("正在获取数据..."+len);
+        }
+
+        System.out.println("读取完毕");
+
+        String tmp = subtext.toString();
+
+        return tmp;
+    }
+
+
+
+
+    //获取网站
+    public String getHtml(String link,String charset) throws Exception{
+
+        subtext = new StringBuffer();
+
+        URL suburl = new URL(link);
+
+        HttpURLConnection huc = (HttpURLConnection) suburl.openConnection();
+        System.out.println("打开连接..."+huc.getResponseMessage());
+        InputStream is = huc.getInputStream();
+        int len = 0;
+
+        byte data[]=new byte[1024];
+        System.out.println("开始读取");
+        while((len = is.read(data)) != -1){
+
+            subtext.append(new String(data,0,len,charset));
+            //System.out.println("正在获取数据..."+len);
+        }
+        System.out.println("读取完毕");
+        String tmp = subtext.toString();
+
+        return tmp;
+    }
+
+
+
     //获取网站指定 前文本和后文本 批量中间的string
 
     public List<String> getHtmlSubText(String link,String start,String end) throws Exception{

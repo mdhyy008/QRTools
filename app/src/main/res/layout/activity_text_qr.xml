@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cons"
@@ -20,7 +20,7 @@
             tools:layout_editor_absoluteY="0dp">
 
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp">
@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/QR_create_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -40,19 +40,101 @@
                         app:counterMaxLength="1000"
                         >
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="请输入文本或链接"
                             android:maxLines="7"
                             android:gravity="top"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+
+
+
+            <!--识别到的内容，来指定打开方式-->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="快捷操作"
+                        android:layout_margin="10dp"/>
+
+                    <!--ChipGroup 默认状态，会换行，可多选-->
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        app:chipSpacingVertical="10dp"
+                        app:chipSpacingHorizontal="10dp"
+                        android:id="@+id/qr_ChipGroup"
+                        >
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipInGroup1"
+                            app:chipBackgroundColor="@color/colorAccent"
+                            android:textColor="#ffffff"
+                            style="@style/Widget.MaterialComponents.Chip.Action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="编码转UTF-8"
+                            android:onClick="code_utf8"
+                            android:textAppearance="?android:textAppearanceMedium" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipInGroup2"
+                            app:chipBackgroundColor="@color/colorAccent"
+                            android:textColor="#ffffff"
+                            style="@style/Widget.MaterialComponents.Chip.Action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="编码转GBK"
+                            android:onClick="code_gbk"
+                            android:textAppearance="?android:textAppearanceMedium" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipInGroup3"
+                            app:chipBackgroundColor="@color/colorAccent"
+                            android:textColor="#ffffff"
+                            style="@style/Widget.MaterialComponents.Chip.Action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="文本加密"
+                            android:onClick="qr_pass"
+                            android:textAppearance="?android:textAppearanceMedium" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipInGroup4"
+                            app:chipBackgroundColor="@color/colorAccent"
+                            android:textColor="#ffffff"
+                            style="@style/Widget.MaterialComponents.Chip.Action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="本机IP"
+                            android:onClick="qr_ipset"
+                            android:textAppearance="?android:textAppearanceMedium" />
+
+
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+
+            <androidx.cardview.widget.CardView
                 android:id="@+id/QR_create_imgcard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,7 +171,7 @@
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/ic_launcher" />
 
-                        <android.support.v7.widget.CardView
+                        <androidx.cardview.widget.CardView
                             android:id="@+id/icrcard"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
@@ -105,12 +187,12 @@
                                 android:layout_gravity="center"
                                 android:scaleType="fitCenter"
                                 app:srcCompat="@mipmap/cxxx" />
-                        </android.support.v7.widget.CardView>
+                        </androidx.cardview.widget.CardView>
 
                     </RelativeLayout>
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
             <Button
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
@@ -143,4 +225,4 @@
 
         </LinearLayout>
     </ScrollView>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -106,6 +106,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             public void run() {
                 Looper.prepare();
                 Toast.makeText(mContext, "捕获到异常:" + eeeee, Toast.LENGTH_LONG).show();
+/*
 
                 new Thread(new Runnable() {
 
@@ -128,6 +129,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                     }
                 }).start();
 
+*/
 
 
                 Looper.loop();

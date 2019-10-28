@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cons"
@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
@@ -32,7 +32,7 @@
                 android:textColor="@color/colorAccent"
                 android:textIsSelectable="true"/>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
 
 
@@ -44,7 +44,7 @@
             android:text="程序智能识别:"
             android:textColor="#ec2727" />
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/cd1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,13 +79,13 @@
                     android:onClick="res_share"
                     android:text="分享" />
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
 
 
 
         <!--识别到的内容，来指定打开方式-->
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/cd2"
             android:visibility="gone"
             android:layout_width="match_parent"
@@ -119,12 +119,12 @@
                     android:onClick="res_openweb"
                     android:text="内置Web打开" />
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
 
 
         <!--识别到的内容，来指定打开方式-->
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/cd3"
             android:visibility="gone"
             android:layout_width="match_parent"
@@ -160,14 +160,14 @@
                     android:text="保存到已有联系人"
                />
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
 
 
         <!--识别到的内容，来指定打开方式-->
 
         <!--识别到的内容，来指定打开方式-->
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/cd5"
             android:visibility="gone"
             android:layout_width="match_parent"
@@ -194,12 +194,12 @@
                     android:onClick="res_linkwifi"
                     android:text="点击连接" />
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
 
 
         <!--识别到的内容，来指定打开方式-->
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
@@ -213,14 +213,79 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="更多操作" />
+                    android:text="更多操作"
+                    android:layout_margin="10dp"/>
+
+                <!--ChipGroup 默认状态，会换行，可多选-->
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:chipSpacingVertical="10dp"
+                    app:chipSpacingHorizontal="10dp"
+                    >
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipInGroup1"
+                        app:chipBackgroundColor="@color/colorAccent"
+                        android:textColor="#ffffff"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="编码转UTF-8"
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipInGroup2"
+                        app:chipBackgroundColor="@color/colorAccent"
+                        android:textColor="#ffffff"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="编码转GBK"
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipInGroup3"
+                        app:chipBackgroundColor="@color/colorAccent"
+                        android:textColor="#ffffff"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="文本解密"
+                        android:onClick="res_pass"
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipInGroup4"
+                        app:chipBackgroundColor="@color/colorAccent"
+                        android:textColor="#ffffff"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="条形码识别"
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipInGroup5"
+                        app:chipBackgroundColor="@color/colorAccent"
+                        android:textColor="#ffffff"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="复制并跳转SSR"
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
 
 
 
         <!--识别到的内容，来指定打开方式-->
     </LinearLayout></ScrollView>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,9 +17,10 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.customtabs.CustomTabsIntent;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.browser.customtabs.CustomTabsIntent;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
