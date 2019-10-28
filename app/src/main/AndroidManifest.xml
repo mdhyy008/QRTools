@@ -119,11 +119,13 @@
         <service
             android:name=".ClipService"
             android:enabled="true"
-            android:exported="true" /> <!-- 访问文件权限 -->
+            android:exported="true" />
         <service
             android:name=".ScreenshotMonitorService"
             android:enabled="true"
             android:exported="true" />
+
+
     </application>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 储存权限 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" /> <!-- 安装SHORTCUT -->
