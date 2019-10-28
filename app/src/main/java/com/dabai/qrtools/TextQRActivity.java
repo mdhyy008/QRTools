@@ -42,8 +42,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.dabai.qrtools.utils.AESUtils3;
-import com.dabai.qrtools.utils.DESUtil;
-import com.dabai.qrtools.utils.SymmetricEncoder;
+import com.dabai.qrtools.utils.Base64;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
@@ -87,6 +86,7 @@ public class TextQRActivity extends AppCompatActivity {
 
     boolean is_rad = true;
     private String TAG = "dabaizzz";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -607,12 +607,17 @@ public class TextQRActivity extends AppCompatActivity {
      *
      * @param view
      */
-    public void code_utf8(View view) {
+    public void code_base64(View view) {
 
         String text = til.getEditText().getText().toString();
-        if (!text.isEmpty()) {
+
+        Base64 base = new Base64();
+        String resul = base.encode(text);
+
+        if (!resul.isEmpty()) {
+
             QRColor = Color.BLACK;
-            Bitmap bit = createQRCodeBitmap(text, 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+            Bitmap bit = createQRCodeBitmap(resul, 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
             img.setImageBitmap(bit);
             isOK = true;
             Snackbar.make(cons, "转换完成！", Snackbar.LENGTH_SHORT).show();
@@ -626,24 +631,7 @@ public class TextQRActivity extends AppCompatActivity {
         }
     }
 
-    public void code_gbk(View view) {
 
-        String text = til.getEditText().getText().toString();
-        if (!text.isEmpty()) {
-            QRColor = Color.BLACK;
-            Bitmap bit = createQRCodeBitmap(text, 700, 700, "GBK", "H", "1", QRColor, QRBackColor);
-            img.setImageBitmap(bit);
-            isOK = true;
-            Snackbar.make(cons, "转换完成！", Snackbar.LENGTH_SHORT).show();
-
-        } else {
-            Snackbar.make(cons, "无内容，不生成", Snackbar.LENGTH_SHORT).show();
-        }
-        try {
-            hideInput();
-        } catch (Exception e) {
-        }
-    }
 
     public void qr_ipset(View view) {
         edit.setText("获取中...");

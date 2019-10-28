@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,12 +30,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.dabai.qrtools.utils.AESUtils3;
-import com.dabai.qrtools.utils.DESUtil;
-import com.dabai.qrtools.utils.SymmetricEncoder;
+import com.dabai.qrtools.utils.Base64;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -468,4 +469,37 @@ public class ScanResultActivity extends AppCompatActivity {
                 .neutralText("取消")
                 .show();
     }
+
+    public void code_dnbase64(View view) {
+
+        /**
+         * 解码base64
+         */
+        try {
+            Base64 base = new Base64();
+            destxt =  base.decode(restext);
+        } catch (Exception e) {
+        }
+
+        new MaterialDialog.Builder(ScanResultActivity.this)
+                .title("结果")
+                .content(""+destxt)
+                .positiveText("复制")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        ClipboardManager clipboardManager = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData mclipData = ClipData.newPlainText("Label", destxt);
+                        clipboardManager.setPrimaryClip(mclipData);
+
+                        Snackbar.make(cons, "复制成功", Snackbar.LENGTH_SHORT).show();
+                    }
+                })
+                .neutralText("关闭")
+                .show();
+
+    }
+
+
 }

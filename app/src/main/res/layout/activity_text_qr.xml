@@ -90,20 +90,10 @@
                             style="@style/Widget.MaterialComponents.Chip.Action"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="编码转UTF-8"
-                            android:onClick="code_utf8"
+                            android:text="base64编码"
+                            android:onClick="code_base64"
                             android:textAppearance="?android:textAppearanceMedium" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipInGroup2"
-                            app:chipBackgroundColor="@color/colorAccent"
-                            android:textColor="#ffffff"
-                            style="@style/Widget.MaterialComponents.Chip.Action"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="编码转GBK"
-                            android:onClick="code_gbk"
-                            android:textAppearance="?android:textAppearanceMedium" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipInGroup3"
@@ -112,7 +102,7 @@
                             style="@style/Widget.MaterialComponents.Chip.Action"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="文本加密"
+                            android:text="AES加密"
                             android:onClick="qr_pass"
                             android:textAppearance="?android:textAppearanceMedium" />
 

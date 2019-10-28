@@ -232,18 +232,10 @@
                         style="@style/Widget.MaterialComponents.Chip.Action"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="编码转UTF-8"
+                        android:text="base64解码"
+                        android:onClick="code_dnbase64"
                         android:textAppearance="?android:textAppearanceMedium" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipInGroup2"
-                        app:chipBackgroundColor="@color/colorAccent"
-                        android:textColor="#ffffff"
-                        style="@style/Widget.MaterialComponents.Chip.Action"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="编码转GBK"
-                        android:textAppearance="?android:textAppearanceMedium" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipInGroup3"
@@ -252,7 +244,7 @@
                         style="@style/Widget.MaterialComponents.Chip.Action"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="文本解密"
+                        android:text="AES解密"
                         android:onClick="res_pass"
                         android:textAppearance="?android:textAppearanceMedium" />
 
