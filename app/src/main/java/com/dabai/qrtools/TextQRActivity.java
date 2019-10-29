@@ -53,6 +53,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
@@ -602,6 +603,37 @@ public class TextQRActivity extends AppCompatActivity {
     }
 
 
+    private static final int BLACK = 0xff000000;
+    private static final int WHITE = 0xFFFFFFFF;
+    private static BarcodeFormat barcodeFormat = BarcodeFormat.CODE_128;
+
+    public static Bitmap creatBarcode(String contents, int desiredWidth, int desiredHeight) {
+        MultiFormatWriter writer = new MultiFormatWriter();
+        BitMatrix result = null;
+        try {
+            result = writer.encode(contents, barcodeFormat, desiredWidth,
+                    desiredHeight);
+        } catch (WriterException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        int width = result.getWidth();
+        int height = result.getHeight();
+        int[] pixels = new int[width * height];
+        // All are 0, or black, by default
+        for (int y = 0; y < height; y++) {
+            int offset = y * width;
+            for (int x = 0; x < width; x++) {
+                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
+            }
+        }
+        Bitmap bitmap = Bitmap.createBitmap(width, height,
+                Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return bitmap;
+    }
+
+
     /**
      * 编码 转换utf8
      *
@@ -630,7 +662,6 @@ public class TextQRActivity extends AppCompatActivity {
         } catch (Exception e) {
         }
     }
-
 
 
     public void qr_ipset(View view) {
@@ -669,11 +700,10 @@ public class TextQRActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * 判断字符串中是否包含中文
-     * @param str
-     * 待校验字符串
+     *
+     * @param str 待校验字符串
      * @return 是否为中文
      * @warn 不能校验是否为中文标点符号
      */
@@ -688,6 +718,7 @@ public class TextQRActivity extends AppCompatActivity {
 
 
     String all_texttt;
+
     public void qr_pass(View view) {
 
         all_texttt = til.getEditText().getText().toString();
@@ -701,10 +732,10 @@ public class TextQRActivity extends AppCompatActivity {
                         @Override
                         public void onInput(MaterialDialog dialog, CharSequence input) {
 
-                            if (!isContainChinese(input+"") && !(input+"").equals("")) {
+                            if (!isContainChinese(input + "") && !(input + "").equals("")) {
                                 String txt = null;
                                 try {
-                                    txt = AESUtils3.encrypt(all_texttt,"" + input);
+                                    txt = AESUtils3.encrypt(all_texttt, "" + input);
                                 } catch (Exception e) {
                                 }
 
@@ -714,7 +745,7 @@ public class TextQRActivity extends AppCompatActivity {
                                 isOK = true;
                                 Snackbar.make(cons, "加密完成！", Snackbar.LENGTH_SHORT).show();
 
-                            }else {
+                            } else {
                                 Snackbar.make(cons, "无密钥或包含中文字符，不生成", Snackbar.LENGTH_SHORT).show();
                             }
 
@@ -753,5 +784,39 @@ public class TextQRActivity extends AppCompatActivity {
             hideInput();
         } catch (Exception e) {
         }
+    }
+
+
+    public void qr_barcode(View view) {
+        String text = til.getEditText().getText().toString();
+
+
+        if (!text.isEmpty()) {
+           if (isContainChinese(text)){
+               Snackbar.make(cons, "条形码转换不支持中文！", Snackbar.LENGTH_SHORT).show();
+
+           }
+           else {
+               try {
+                   QRColor = Color.BLACK;
+                   Bitmap qrCodeBitmap = creatBarcode(text, 1000, 300);
+                   img.setImageBitmap(qrCodeBitmap);
+                   isOK = true;
+
+                   Snackbar.make(cons, "转换完成！", Snackbar.LENGTH_SHORT).show();
+               } catch (Exception e) {
+                   Snackbar.make(cons, "转换失败！", Snackbar.LENGTH_SHORT).show();
+               }
+
+           }
+        } else {
+            Snackbar.make(cons, "无内容，不生成", Snackbar.LENGTH_SHORT).show();
+        }
+
+        try {
+            hideInput();
+        } catch (Exception e) {
+        }
+
     }
 }
