@@ -7,6 +7,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,6 +18,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -47,6 +49,16 @@ public class DabaiUtils {
      创建日期 2019.5.9
      创建类型 工具类
      **/
+
+
+    /**
+     * 打开app
+     */
+
+public void openApp(Context context,String Packname){
+    Intent resolveIntent = context.getPackageManager().getLaunchIntentForPackage(Packname);
+    context.startActivity(resolveIntent);
+}
 
 
 //常见权限  要写在清单文件才能动态调用
@@ -664,5 +676,18 @@ public class DabaiUtils {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
+
+
+    public boolean checkApkExist(Context context, String packageName){
+        if (TextUtils.isEmpty(packageName))
+            return false;
+        try {
+            ApplicationInfo info = context.getPackageManager()
+                    .getApplicationInfo(packageName, PackageManager.GET_UNINSTALLED_PACKAGES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
 
 }

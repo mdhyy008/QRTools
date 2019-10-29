@@ -256,6 +256,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="条形码识别"
+                        android:onClick="res_tiao"
                         android:textAppearance="?android:textAppearanceMedium" />
 
                     <com.google.android.material.chip.Chip
@@ -266,6 +267,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="复制并跳转SSR"
+                        android:onClick="res_ssrr"
                         android:textAppearance="?android:textAppearanceMedium" />
 
                 </com.google.android.material.chip.ChipGroup>

@@ -734,4 +734,24 @@ public class TextQRActivity extends AppCompatActivity {
         }
 
     }
+
+    public void code_utf8(View view) {
+
+
+        String text = til.getEditText().getText().toString();
+        if (!text.isEmpty()) {
+            QRColor = Color.BLACK;
+            Bitmap bit = createQRCodeBitmap(text, 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+            img.setImageBitmap(bit);
+            isOK = true;
+            Snackbar.make(cons, "转换完成！", Snackbar.LENGTH_SHORT).show();
+
+        } else {
+            Snackbar.make(cons, "无内容，不生成", Snackbar.LENGTH_SHORT).show();
+        }
+        try {
+            hideInput();
+        } catch (Exception e) {
+        }
+    }
 }

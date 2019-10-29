@@ -33,6 +33,9 @@ import com.dabai.qrtools.utils.AESUtils3;
 import com.dabai.qrtools.utils.Base64;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -57,6 +60,7 @@ public class ScanResultActivity extends AppCompatActivity {
     private ProgressDialog pd;
     private WifiManager mWifiManager;
     WifiInfo mWifiInfo;
+    private String TAG = "dabaizzz";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +79,7 @@ public class ScanResultActivity extends AppCompatActivity {
 
         restext = result;
 
-        if (restext.startsWith("funny:")){
+        if (restext.startsWith("funny:")) {
             Toast.makeText(this, "滑稽控链接，可直接用浏览器打开", Toast.LENGTH_LONG).show();
         }
 
@@ -141,8 +145,6 @@ public class ScanResultActivity extends AppCompatActivity {
     }
 
 
-
-
     //发送文本
     private void sendText(String p0) {
         Intent sendIntent = new Intent();
@@ -172,7 +174,7 @@ public class ScanResultActivity extends AppCompatActivity {
     //打开链接
     public void res_openlink(View view) {
 
-        if (restext.startsWith("http")||restext.startsWith("funny")||restext.startsWith("dabai:")) {
+        if (restext.startsWith("http") || restext.startsWith("funny") || restext.startsWith("dabai:")) {
             //浏览器
             new DabaiUtils().openLink(this, restext);
         } else {
@@ -182,9 +184,10 @@ public class ScanResultActivity extends AppCompatActivity {
     }
 
 
-
-    /**创建新的联系人*/
-    public void createNewContact(String name,String phone){
+    /**
+     * 创建新的联系人
+     */
+    public void createNewContact(String name, String phone) {
         Intent intent = new Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(android.provider.ContactsContract.Intents.Insert.NAME, name);
@@ -214,22 +217,22 @@ public class ScanResultActivity extends AppCompatActivity {
         String phonenumber = "";
 
 
-        for (String duan:people) {
+        for (String duan : people) {
             String[] tmp = duan.split(":");
 
             String key = tmp[0];
             String value = tmp[1];
 
-            if (key.toUpperCase().equals("N")){
+            if (key.toUpperCase().equals("N")) {
                 name = value;
             }
 
-            if (key.toUpperCase().equals("TEL")){
+            if (key.toUpperCase().equals("TEL")) {
                 phonenumber = value;
             }
         }
 
-        createNewContact(""+name,""+phonenumber);
+        createNewContact("" + name, "" + phonenumber);
     }
 
     //保存联系人
@@ -241,25 +244,23 @@ public class ScanResultActivity extends AppCompatActivity {
         String phonenumber = "";
 
 
-        for (String duan:people) {
+        for (String duan : people) {
             String[] tmp = duan.split(":");
 
             String key = tmp[0];
             String value = tmp[1];
 
-            if (key.toUpperCase().equals("N")){
+            if (key.toUpperCase().equals("N")) {
                 name = value;
             }
 
-            if (key.toUpperCase().equals("TEL")){
+            if (key.toUpperCase().equals("TEL")) {
                 phonenumber = value;
             }
         }
 
-        saveExistContact(""+name,""+phonenumber);
+        saveExistContact("" + name, "" + phonenumber);
     }
-
-
 
 
     public void res_openweb(View view) {
@@ -268,7 +269,6 @@ public class ScanResultActivity extends AppCompatActivity {
         intent.putExtra("link", restext);
         startActivity(intent);
     }
-
 
 
     public void res_linkwifi(View view) {
@@ -411,11 +411,10 @@ public class ScanResultActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * 判断字符串中是否包含中文
-     * @param str
-     * 待校验字符串
+     *
+     * @param str 待校验字符串
      * @return 是否为中文
      * @warn 不能校验是否为中文标点符号
      */
@@ -429,6 +428,7 @@ public class ScanResultActivity extends AppCompatActivity {
     }
 
     String destxt;
+
     public void res_pass(View view) {
 
         new MaterialDialog.Builder(this)
@@ -440,13 +440,13 @@ public class ScanResultActivity extends AppCompatActivity {
 
 
                         try {
-                            destxt = AESUtils3.decrypt(restext,"" + input);
+                            destxt = AESUtils3.decrypt(restext, "" + input);
                         } catch (Exception e) {
                         }
 
                         new MaterialDialog.Builder(ScanResultActivity.this)
                                 .title("解密结果")
-                                .content(""+destxt)
+                                .content("" + destxt)
                                 .positiveText("复制")
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
@@ -477,13 +477,13 @@ public class ScanResultActivity extends AppCompatActivity {
          */
         try {
             Base64 base = new Base64();
-            destxt =  base.decode(restext);
+            destxt = base.decode(restext);
         } catch (Exception e) {
         }
 
         new MaterialDialog.Builder(ScanResultActivity.this)
                 .title("结果")
-                .content(""+destxt)
+                .content("" + destxt)
                 .positiveText("复制")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -502,4 +502,177 @@ public class ScanResultActivity extends AppCompatActivity {
     }
 
 
+    public void res_ssrr(View view) {
+
+        if (restext.startsWith("ssr://") && restext.length() > 100) {
+
+        } else {
+            Toast.makeText(this, "并没有找到ssr标识", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        if (new DabaiUtils().checkApkExist(getApplicationContext(), "in.zhaoj.shadowsocksr")) {
+            ClipboardManager clipboardManager = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData mclipData = ClipData.newPlainText("Label", restext);
+            clipboardManager.setPrimaryClip(mclipData);
+            Toast.makeText(this, "复制成功", Toast.LENGTH_SHORT).show();
+
+            new DabaiUtils().openApp(getApplicationContext(), "in.zhaoj.shadowsocksr");
+            return;
+
+        }
+        if (new DabaiUtils().checkApkExist(getApplicationContext(), "in.zhaoj.shadowsocksrr")) {
+            ClipboardManager clipboardManager = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData mclipData = ClipData.newPlainText("Label", restext);
+            clipboardManager.setPrimaryClip(mclipData);
+            Toast.makeText(this, "复制成功", Toast.LENGTH_SHORT).show();
+
+            new DabaiUtils().openApp(getApplicationContext(), "in.zhaoj.shadowsocksrr");
+            return;
+        }
+        if (new DabaiUtils().checkApkExist(getApplicationContext(), "org.github.shadowsocks")) {
+            ClipboardManager clipboardManager = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData mclipData = ClipData.newPlainText("Label", restext);
+            clipboardManager.setPrimaryClip(mclipData);
+            Toast.makeText(this, "复制成功", Toast.LENGTH_SHORT).show();
+
+            new DabaiUtils().openApp(getApplicationContext(), "org.github.shadowsocks");
+            return;
+        }
+
+        Toast.makeText(this, "你的手机似乎并没有安装任何版本SSR", Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    Exception eeee;
+
+    public void res_tiao(View view) {
+
+        String hostapi = "https://www.mxnzp.com/api/barcode/goods/details?barcode=";
+        final String goodlink = hostapi + restext;
+
+        Log.d(TAG, "res_tiao: " + goodlink);
+
+        final StringBuffer sb = new StringBuffer();
+
+        final MaterialDialog tiaodialog = new MaterialDialog.Builder(this)
+                .title("条形码查询")
+                .content("正在联网查询...")
+                .positiveText("确认")
+                .neutralText("复制")
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        ClipboardManager clipboardManager = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData mclipData = ClipData.newPlainText("Label", sb.toString());
+                        clipboardManager.setPrimaryClip(mclipData);
+                        Toast.makeText(ScanResultActivity.this, "复制成功", Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+                .show();
+
+
+        new Thread(new Runnable() {
+            private JSONObject jo;
+
+            @Override
+            public void run() {
+
+                try {
+                    HtmlUtils hu = new HtmlUtils();
+                    String html = hu.getHtml(goodlink);
+
+                    jo = new JSONObject(html);
+
+                    runOnUiThread(new Runnable() {
+                        private JSONObject jo2;
+
+                        @Override
+                        public void run() {
+                            try {
+                                String msg = jo.getString("msg");
+
+                                if (msg.equals("数据返回成功")) {
+
+                                    jo2 = new JSONObject(jo.getString("data"));
+
+                                    try {
+                                        String goodsName = jo2.getString("goodsName");
+                                        sb.append("商品信息:" + goodsName);
+                                    } catch (Exception e) {
+                                    }
+
+                                    try {
+                                        String barcode = jo2.getString("barcode");
+
+                                        sb.append("\n码值:" + barcode);
+                                    } catch (Exception e) {
+                                    }
+
+
+                                    try {
+                                        String supplier = jo2.getString("supplier");
+
+                                        sb.append("\n供应商:" + supplier);
+                                    } catch (Exception e) {
+                                    }
+
+
+                                    try {
+                                        String price = jo2.getString("price");
+                                        if (!price.equals("")){
+                                        sb.append("\n价格:" + price);}
+                                    } catch (Exception e) {
+                                    }
+
+
+                                    try {
+                                        String standard = jo2.getString("standard");
+                                        if (!standard.equals("")) {
+                                        sb.append("\n标准:" + standard);}
+                                    } catch (Exception e) {
+                                    }
+                                    try {
+                                        String brand = jo2.getString("brand");
+                                        if (!brand.equals("")) {
+                                        sb.append("\n品牌:" + brand);}
+                                    } catch (Exception e) {
+                                    }
+
+                                    tiaodialog.setContent(sb.toString());
+
+
+                                } else {
+                                    tiaodialog.setContent("" + msg);
+                                }
+
+                            } catch (JSONException e) {
+                                eeee = e;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Log.d(TAG, "run: " + eeee);
+                                        tiaodialog.setContent("数据异常..." + eeee);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    eeee = e;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d(TAG, "run: " + eeee);
+                            tiaodialog.setContent("网络异常..." + eeee);
+                        }
+                    });
+                }
+            }
+        }).start();
+
+    }
 }
