@@ -99,19 +99,6 @@ public class TextOpen extends AppCompatActivity {
         }
 
 
-        //监听
-        tv.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-                ClipboardManager clipboardManager = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                clipboardManager.setText(tv.getText().toString());
-                Snackbar.make(cons, "复制成功", Snackbar.LENGTH_SHORT).show();
-
-                return true;
-            }
-        });
-
 
         sw1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

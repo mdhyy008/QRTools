@@ -558,7 +558,7 @@ public class ScanResultActivity extends AppCompatActivity {
         final StringBuffer sb = new StringBuffer();
 
         final MaterialDialog tiaodialog = new MaterialDialog.Builder(this)
-                .title("条形码查询")
+                .title("商品查询")
                 .content("正在联网查询...")
                 .positiveText("确认")
                 .neutralText("复制")
@@ -616,7 +616,9 @@ public class ScanResultActivity extends AppCompatActivity {
                                     try {
                                         String supplier = jo2.getString("supplier");
 
-                                        sb.append("\n供应商:" + supplier);
+                                        if (!supplier.equals("")) {
+                                            sb.append("\n供应商:" + supplier);
+                                        }
                                     } catch (Exception e) {
                                     }
 

@@ -86,7 +86,7 @@
             android:label="调用微信扫一扫" />
         <activity
             android:name=".WebActivity"
-            android:label="QRT打开链接">
+            android:label="QRT浏览器">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
 

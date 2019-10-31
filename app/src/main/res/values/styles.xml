@@ -5,9 +5,11 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#fff</item>
         <item name="colorPrimaryDark">#fff</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">#616161</item>
         <item name="android:textViewStyle">@style/MyTextViewStyle</item>
     </style>
+
+
 
     <!--自定义对话框样式-->
     <style name="dialog_style_bottom" parent="android:Animation">
