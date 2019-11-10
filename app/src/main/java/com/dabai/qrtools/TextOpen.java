@@ -115,12 +115,12 @@ public class TextOpen extends AppCompatActivity {
                     }
                     tv.setText(telink);
 
-                    Bitmap bit = createQRCodeBitmap(telink, 700, 700, "UTF-8", "L", "1", Color.BLACK, Color.WHITE);
+                    Bitmap bit = createQRCodeBitmap(telink, 700, 700, "UTF-8", "H", "1", Color.BLACK, Color.WHITE);
                     img.setImageBitmap(bit);
                 } else {
                     tv.setText(tenolink);
 
-                    Bitmap bit = createQRCodeBitmap(tenolink, 700, 700, "UTF-8", "L", "1", Color.BLACK, Color.WHITE);
+                    Bitmap bit = createQRCodeBitmap(tenolink, 700, 700, "UTF-8", "H", "1", Color.BLACK, Color.WHITE);
                     img.setImageBitmap(bit);
 
                 }

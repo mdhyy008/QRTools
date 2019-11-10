@@ -689,5 +689,11 @@ public void openApp(Context context,String Packname){
             return false;
         }
     }
+    public void admDownload(Context context,String link){
+        Intent intent = new Intent();
+        intent.setData(Uri.parse(link));
+        intent.setClassName("com.dv.adm.pay","com.dv.get.AEditor");
+        context.startActivity(intent);
+    }
 
 }

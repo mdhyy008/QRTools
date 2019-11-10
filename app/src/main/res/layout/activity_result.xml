@@ -226,7 +226,6 @@
                     >
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/chipInGroup1"
                         app:chipBackgroundColor="@color/colorAccent"
                         android:textColor="#ffffff"
                         style="@style/Widget.MaterialComponents.Chip.Action"
@@ -238,7 +237,6 @@
 
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/chipInGroup3"
                         app:chipBackgroundColor="@color/colorAccent"
                         android:textColor="#ffffff"
                         style="@style/Widget.MaterialComponents.Chip.Action"
@@ -249,7 +247,6 @@
                         android:textAppearance="?android:textAppearanceMedium" />
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/chipInGroup4"
                         app:chipBackgroundColor="@color/colorAccent"
                         android:textColor="#ffffff"
                         style="@style/Widget.MaterialComponents.Chip.Action"
@@ -260,7 +257,6 @@
                         android:textAppearance="?android:textAppearanceMedium" />
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/chipInGroup5"
                         app:chipBackgroundColor="@color/colorAccent"
                         android:textColor="#ffffff"
                         style="@style/Widget.MaterialComponents.Chip.Action"
@@ -269,6 +265,17 @@
                         android:text="复制并跳转SSR"
                         android:onClick="res_ssrr"
                         android:textAppearance="?android:textAppearanceMedium" />
+
+                    <com.google.android.material.chip.Chip
+                        app:chipBackgroundColor="@color/colorAccent"
+                        android:textColor="#ffffff"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="蓝奏云解析"
+                        android:onClick="lanzou"
+                        android:textAppearance="?android:textAppearanceMedium" />
+
 
                 </com.google.android.material.chip.ChipGroup>
 

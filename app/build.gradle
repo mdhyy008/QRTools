@@ -7,8 +7,8 @@ android {
         applicationId "com.dabai.qrtools"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 96
-        versionName "2.9.2"
+        versionCode 98
+        versionName "2.9.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,7 +33,7 @@ dependencies {
      *   第三方库
      */
     implementation 'com.google.zxing:core:3.3.0'
-    implementation 'com.github.QuadFlask:colorpicker:0.0.13'
+    implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     implementation 'com.github.wildma:PictureSelector:1.1.1'
     implementation 'com.github.qingmei2:rximagepicker:0.2.0'
     //【2】提供了自定义UI图片选择器的基本组件，自定义UI的需求需要添加该依赖

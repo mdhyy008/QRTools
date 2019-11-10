@@ -31,6 +31,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.dabai.qrtools.utils.AESUtils3;
 import com.dabai.qrtools.utils.Base64;
+import com.dabai.qrtools.utils.DownloadManagerUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
@@ -625,8 +626,9 @@ public class ScanResultActivity extends AppCompatActivity {
 
                                     try {
                                         String price = jo2.getString("price");
-                                        if (!price.equals("")){
-                                        sb.append("\n价格:" + price);}
+                                        if (!price.equals("")) {
+                                            sb.append("\n价格:" + price);
+                                        }
                                     } catch (Exception e) {
                                     }
 
@@ -634,13 +636,15 @@ public class ScanResultActivity extends AppCompatActivity {
                                     try {
                                         String standard = jo2.getString("standard");
                                         if (!standard.equals("")) {
-                                        sb.append("\n标准:" + standard);}
+                                            sb.append("\n标准:" + standard);
+                                        }
                                     } catch (Exception e) {
                                     }
                                     try {
                                         String brand = jo2.getString("brand");
                                         if (!brand.equals("")) {
-                                        sb.append("\n品牌:" + brand);}
+                                            sb.append("\n品牌:" + brand);
+                                        }
                                     } catch (Exception e) {
                                     }
 
@@ -675,6 +679,248 @@ public class ScanResultActivity extends AppCompatActivity {
                 }
             }
         }).start();
+
+    }
+
+
+    String file_url, lanzou_filename;
+
+    public void lanzou(View view) {
+
+
+        String parselink = "http://api2.funs.ml/lzy/api.php?url=";
+        if (restext.contains("www.lanzous.com")) {
+
+            final String biaoshi = restext.substring(restext.lastIndexOf("/")).replace("/", "");
+            final String lanzouJson = parselink + biaoshi;
+
+            final MaterialDialog lanzoudialog = new MaterialDialog.Builder(this)
+                    .title("蓝奏云解析")
+                    .content("正在联网解析...")
+                    .positiveText("系统下载")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            try {
+                                if (file_url.isEmpty()) {
+
+                                    new MaterialDialog.Builder(ScanResultActivity.this)
+                                            .title("输入密码")
+                                            .inputType(InputType.TYPE_CLASS_TEXT)
+                                            .input("", null, new MaterialDialog.InputCallback() {
+                                                private String pwdstrlink;
+
+                                                @Override
+                                                public void onInput(MaterialDialog dialog, CharSequence input) {
+
+                                                    pwdstrlink = "http://api2.funs.ml/lzy/api.php?url=" + biaoshi + "&pwd=" + input + "&type=down";
+
+                                                    new Thread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            try {
+                                                                runOnUiThread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        Toast.makeText(ScanResultActivity.this, "正在检查密码...", Toast.LENGTH_LONG).show();
+                                                                    }
+                                                                });
+                                                                JSONObject jo = new JSONObject(new HtmlUtils().getHtml(pwdstrlink));
+
+                                                                if (jo.getString("file_url").isEmpty()) {
+                                                                    runOnUiThread(new Runnable() {
+                                                                        @Override
+                                                                        public void run() {
+                                                                            Toast.makeText(ScanResultActivity.this, "密码错误!", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    });
+
+                                                                } else {
+                                                                    file_url = jo.getString("file_url");
+                                                                    DownloadManagerUtil dmu = new DownloadManagerUtil(getApplicationContext());
+                                                                    dmu.download(file_url, lanzou_filename, "QRT下载服务");
+
+                                                                    runOnUiThread(new Runnable() {
+                                                                        @Override
+                                                                        public void run() {
+                                                                            Toast.makeText(ScanResultActivity.this, "系统开始下载!", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    });
+                                                                }
+                                                            } catch (Exception e) {
+                                                                runOnUiThread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        Toast.makeText(ScanResultActivity.this, "密码错误或网络异常!", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }).start();
+
+
+                                                }
+                                            })
+                                            .positiveText("确定")
+                                            .show();
+                                } else {
+                                    DownloadManagerUtil dmu = new DownloadManagerUtil(getApplicationContext());
+                                    dmu.download(file_url, lanzou_filename, "QRT下载服务");
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(ScanResultActivity.this, "系统开始下载!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(ScanResultActivity.this, "出了问题!", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    })
+                    .neutralText("ADM下载")
+                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            try {
+                                if (file_url.isEmpty()) {
+
+                                    new MaterialDialog.Builder(ScanResultActivity.this)
+                                            .title("输入密码")
+                                            .inputType(InputType.TYPE_CLASS_TEXT)
+                                            .input("", null, new MaterialDialog.InputCallback() {
+                                                private String pwdstrlink;
+
+                                                @Override
+                                                public void onInput(MaterialDialog dialog, CharSequence input) {
+
+                                                    pwdstrlink = "http://api2.funs.ml/lzy/api.php?url=" + biaoshi + "&pwd=" + input + "&type=down";
+
+                                                    new Thread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            try {
+                                                                runOnUiThread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        Toast.makeText(ScanResultActivity.this, "正在检查密码...", Toast.LENGTH_LONG).show();
+                                                                    }
+                                                                });
+                                                                JSONObject jo = new JSONObject(new HtmlUtils().getHtml(pwdstrlink));
+
+                                                                if (jo.getString("file_url").isEmpty()) {
+                                                                    runOnUiThread(new Runnable() {
+                                                                        @Override
+                                                                        public void run() {
+                                                                            Toast.makeText(ScanResultActivity.this, "密码错误!", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    });
+
+                                                                } else {
+                                                                    file_url = jo.getString("file_url");
+                                                                    new DabaiUtils().admDownload(getApplicationContext(), file_url);
+
+                                                                    runOnUiThread(new Runnable() {
+                                                                        @Override
+                                                                        public void run() {
+                                                                            Toast.makeText(ScanResultActivity.this, "ADM开始下载!", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    });
+                                                                }
+                                                            } catch (Exception e) {
+                                                                runOnUiThread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        Toast.makeText(ScanResultActivity.this, "密码错误或网络异常!", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }).start();
+                                                }
+                                            })
+                                            .positiveText("确定")
+                                            .show();
+                                } else {
+                                    new DabaiUtils().admDownload(getApplicationContext(), file_url);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(ScanResultActivity.this, "ADM开始下载!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(ScanResultActivity.this, "出了问题!", Toast.LENGTH_SHORT).show();
+                            }
+
+
+
+                        }
+                    })
+                    .show();
+
+
+            new Thread(new Runnable() {
+                private JSONObject jo;
+                StringBuffer sbbb = new StringBuffer();
+
+                @Override
+                public void run() {
+
+                    try {
+                        HtmlUtils hu = new HtmlUtils();
+                        String html = hu.getHtml(lanzouJson);
+                        jo = new JSONObject(html);
+
+                        lanzou_filename = jo.getString("file_name");
+
+                        if (lanzou_filename.isEmpty()) {
+                            sbbb.append("错误的蓝奏云链接!");
+                        } else {
+                            file_url = jo.getString("file_url");
+                            if (file_url.isEmpty()) {
+                                //加密
+                                sbbb.append("文件名:" + lanzou_filename);
+                                sbbb.append("\n上传者:" + jo.getString("file_up"));
+                                sbbb.append("\n上传时间:" + jo.getString("file_time"));
+                                sbbb.append("\n文件链接:" + "已加密");
+                            } else {
+                                //未加密
+                                sbbb.append("文件名:" + lanzou_filename);
+                                sbbb.append("\n上传者:" + jo.getString("file_up"));
+                                sbbb.append("\n上传时间:" + jo.getString("file_time"));
+                                sbbb.append("\n文件链接:" + file_url);
+                            }
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                lanzoudialog.setContent(sbbb.toString());
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        eeee = e;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.d(TAG, "run: " + eeee);
+                                lanzoudialog.setContent("网络异常..." + eeee);
+                            }
+                        });
+                    }
+                }
+            }).start();
+
+
+        } else {
+            Toast.makeText(this, "未找到蓝奏云标识", Toast.LENGTH_SHORT).show();
+        }
 
     }
 }
