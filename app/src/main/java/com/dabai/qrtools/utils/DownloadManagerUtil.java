@@ -26,6 +26,10 @@ public class DownloadManagerUtil {
         req.setVisibleInDownloadsUi(true);
         //通知栏标题
         req.setTitle(title);
+
+        // 允许在计费流量下下载
+        req.setAllowedOverMetered(true);
+
         //通知栏描述信息
         req.setDescription(desc);
         //设置类型为.apk

@@ -159,7 +159,6 @@ public class TextOpen extends AppCompatActivity {
     private void sendText(String p0) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is text to send.");
         // 指定发送内容的类型
         sendIntent.setType("text/plain");
         sendIntent.putExtra(Intent.EXTRA_TEXT, p0);

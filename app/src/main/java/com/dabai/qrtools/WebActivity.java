@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.DownloadListener;
 import android.webkit.JsResult;
+import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -28,6 +30,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.dabai.qrtools.utils.DownloadManagerUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 public class WebActivity extends AppCompatActivity {
@@ -37,6 +41,7 @@ public class WebActivity extends AppCompatActivity {
     String last;
     ConstraintLayout cons;
     TextView webtip;
+    private String down_file_url,down_filename;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,6 +133,8 @@ public class WebActivity extends AppCompatActivity {
             @Override
             public void onDownloadStart(final String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
 
+                down_filename = URLUtil.guessFileName(url, contentDisposition, mimetype);
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -169,9 +176,61 @@ public class WebActivity extends AppCompatActivity {
                         }).setPositiveButton("下载", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                new DabaiUtils().openLink(WebActivity.this, url);
-                                Toast.makeText(WebActivity.this, "选择一个下载器", Toast.LENGTH_SHORT).show();
-                                finish();
+
+
+                                new MaterialDialog.Builder(WebActivity.this)
+                                        .title("选择一个下载器")
+                                        .cancelable(false)
+                                        .items(new String[]{"系统下载","ADM下载"})
+                                        .itemsCallback(new MaterialDialog.ListCallback() {
+                                            @Override
+                                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                                ad.dismiss();
+                                                webview.loadUrl(last);
+                                                new Thread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                setTitle("首页");
+                                                            }
+                                                        });
+                                                    }
+                                                }).start();
+
+                                                switch (which){
+                                                    case 0:
+
+                                                        try {
+                                                            DownloadManagerUtil dmu = new DownloadManagerUtil(getApplicationContext());
+                                                            dmu.download(url, down_filename, "QRT下载服务");
+                                                            Toast.makeText(WebActivity.this, "系统开始下载!", Toast.LENGTH_SHORT).show();
+                                                        } catch (Exception e) {
+                                                            Toast.makeText(WebActivity.this, "调用系统下载异常!", Toast.LENGTH_SHORT).show();
+                                                        }
+
+                                                        break;
+                                                    case 1:
+
+                                                        try {
+                                                            new DabaiUtils().admDownload(getApplicationContext(),url);
+                                                        } catch (Exception e) {
+                                                            Toast.makeText(WebActivity.this, "调用ADM异常!", Toast.LENGTH_SHORT).show();
+                                                        }
+
+                                                        break;
+                                                }
+
+
+
+                                            }
+                                        })
+                                        .show();
+
+
+
                             }
                         }).show();
 
@@ -236,11 +295,9 @@ public class WebActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } catch (Exception e) {
-                        Snackbar.make(cons, "异常:"+e.toString(), Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(cons, "异常:" + e.toString(), Snackbar.LENGTH_SHORT).show();
 
                     }
-
-
                     return true;
                 }
 
@@ -277,7 +334,7 @@ public class WebActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.share_link:
-                new DabaiUtils().sendText(getApplicationContext(), webview.getUrl());
+                sendText( webview.getUrl());
                 return true;
             case R.id.other_web:
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -295,9 +352,33 @@ public class WebActivity extends AppCompatActivity {
                 webview.loadUrl(webview.getUrl());
 
                 return true;
+            case R.id.to_QR:
+
+                Intent resultIntent = new Intent(this, TextQRActivity.class);
+                resultIntent.putExtra("download", webview.getUrl());
+                startActivity(resultIntent);
+
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    public void sendText(String p0){
+        try {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            // 指定发送内容的类型
+            sendIntent.setType("text/plain");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, p0);
+            sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            startActivity(Intent.createChooser(sendIntent, "Share"));
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "调用分享组件失败!"+e, Toast.LENGTH_SHORT).show();
+
         }
     }
 

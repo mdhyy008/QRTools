@@ -503,10 +503,7 @@ public class MainActivity extends AppCompatActivity {
                                     lv.setVisibility(View.GONE);
 
                                 }
-
-
                                 break;
-
                         }
                     }
                 }).show();
@@ -515,11 +512,10 @@ public class MainActivity extends AppCompatActivity {
         Window window = ad.getWindow();//对话框窗口
         window.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
         window.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
-
-
     }
 
     private void share_thiswifi() {
+
         final View view = LayoutInflater.from(context).inflate(R.layout.dialog_wifishare, null);
 
         AlertDialog addddddd = new AlertDialog.Builder(MainActivity.this)

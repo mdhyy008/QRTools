@@ -554,53 +554,6 @@ public class TextQRActivity extends AppCompatActivity {
         }
     }
 
-    private ImageView imageView;
-    private Dialog dialog;
-    private ImageView image;
-
-    public void see_all(View view) {
-
-        imageView = findViewById(R.id.image_view);
-
-        //展示在dialog上面的大图
-        dialog = new Dialog(TextQRActivity.this, android.R.style.Theme_NoTitleBar_Fullscreen);
-
-        WindowManager.LayoutParams attributes = getWindow().getAttributes();
-        attributes.width = WindowManager.LayoutParams.MATCH_PARENT;
-        attributes.height = WindowManager.LayoutParams.MATCH_PARENT;
-        dialog.getWindow().setAttributes(attributes);
-
-        image = getImageView();
-        dialog.setContentView(image);
-
-        //大图的点击事件（点击让他消失）
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-
-    }
-
-    //动态的ImageView
-    private ImageView getImageView() {
-        ImageView imageView = new ImageView(this);
-
-        //宽高
-        imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-        //imageView设置图片
-        @SuppressLint("ResourceType")
-        CardView imgcard = findViewById(R.id.QR_create_imgcard);
-        Bitmap bitmap = getBitmapByView(imgcard);//iv是View
-        Drawable drawable = new BitmapDrawable(bitmap);
-        imageView.setImageDrawable(drawable);
-
-        return imageView;
-    }
 
 
     private static final int BLACK = 0xff000000;

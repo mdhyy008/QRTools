@@ -120,13 +120,7 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
         }
 
         int checkResult1 = getApplicationContext().checkCallingOrSelfPermission(Manifest.permission.CAMERA);
-        //if(!=允许),抛出异常
-        if (checkResult1 == PackageManager.PERMISSION_GRANTED) {
 
-          IntroView(mButton_Flash, "1", "这里是开启闪光灯的哦",null);
-
-
-        }
     }
 
     @Override
@@ -453,27 +447,6 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
     }
 
 
-    private void IntroView(View v, String id, String text, MaterialIntroListener listener) {
-
-        MaterialIntroView.Builder miv = new MaterialIntroView.Builder(this)
-                .enableDotAnimation(false)
-                .enableIcon(true)
-                .setFocusGravity(FocusGravity.CENTER)
-                .setFocusType(Focus.ALL)
-                .setDelayMillis(200)
-                .setTargetPadding(30)
-                .enableFadeAnimation(true)
-                .performClick(false)
-                .setInfoText(text)
-                .setTarget(v)
-                .setUsageId(id); //THIS SHOULD BE UNIQUE ID
-
-        if (listener != null) {
-            miv.setListener(listener);
-        }
-        miv.show();
-
-    }
 
 
 }

@@ -31,13 +31,6 @@
         </androidx.cardview.widget.CardView>
 
         <Button
-            android:id="@+id/see_all"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="查看大图" />
-
-        <Button
             android:id="@+id/save_more"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"

@@ -175,15 +175,38 @@ public void openApp(Context context,String Packname){
     }
 
 
+    //length用户要求产生字符串的长度
+    public String getRandomString(int length){
+        String str="abcdefghijklmnopqrstuvwxyz0123456789";
+        Random random=new Random();
+        StringBuffer sb=new StringBuffer();
+        for(int i=0;i<length;i++){
+            int number=random.nextInt(36);
+            sb.append(str.charAt(number));
+        }
+        return sb.toString();
+    }
+
+
+
     //发送文本
     public void sendText(Context context,String p0) {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is text to send.");
-        // 指定发送内容的类型
-        sendIntent.setType("text/plain");
-        sendIntent.putExtra(Intent.EXTRA_TEXT, p0);
-        context.startActivity(Intent.createChooser(sendIntent, "Share"));
+
+        try {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            // 指定发送内容的类型
+            sendIntent.setType("text/plain");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, p0);
+            sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            context.startActivity(Intent.createChooser(sendIntent, "Share"));
+        } catch (Exception e) {
+            Toast.makeText(context, "调用分享组件失败!"+e, Toast.LENGTH_SHORT).show();
+            Log.d("dabaizzz", e+"");
+        }
+
+
     }
 
 

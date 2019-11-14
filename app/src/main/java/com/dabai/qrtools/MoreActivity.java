@@ -144,7 +144,6 @@ public class MoreActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
                 String text = list.get(position);
                 if (!text.equals("")) {
                     dia_more.show();
@@ -153,16 +152,7 @@ public class MoreActivity extends AppCompatActivity {
                     Bitmap bit = createQRCodeBitmap(text, 700, 700, "UTF-8", "H", "1", Color.BLACK, Color.WHITE);
                     imgview.setImageBitmap(bit);
 
-                    Button bu1 = dia_more_view.findViewById(R.id.see_all);
                     Button bu2 = dia_more_view.findViewById(R.id.save_more);
-
-
-                    bu1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            see_all();
-                        }
-                    });
 
 
                     bu2.setOnClickListener(new View.OnClickListener() {
@@ -184,71 +174,11 @@ public class MoreActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(context, "此条目没有数据", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
-
-
     }
 
 
-    private ImageView imageView;
-    private Dialog dialog;
-    private ImageView image;
-
-    public void see_all() {
-
-        try {
-            hideInput();
-        } catch (Exception e) {
-        }
-
-        dia_more.dismiss();
-
-        imageView = (ImageView) dia_more_view.findViewById(R.id.imageViewmore);
-
-        //展示在dialog上面的大图
-        dialog = new Dialog(MoreActivity.this, android.R.style.Theme_NoTitleBar_Fullscreen);
-
-        WindowManager.LayoutParams attributes = getWindow().getAttributes();
-        attributes.width = WindowManager.LayoutParams.MATCH_PARENT;
-        attributes.height = WindowManager.LayoutParams.MATCH_PARENT;
-        dialog.getWindow().setAttributes(attributes);
-
-        image = getImageView();
-        dialog.setContentView(image);
-
-        //大图的点击事件（点击让他消失）
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                dia_more.show();
-            }
-        });
-
-        dialog.show();
-
-    }
-
-
-    //动态的ImageView
-    private ImageView getImageView() {
-        ImageView imageView = new ImageView(this);
-
-        //宽高
-        imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-        //imageView设置图片
-        @SuppressLint("ResourceType")
-        CardView imgcard = dia_more_view.findViewById(R.id.img_more_card);
-        Bitmap bitmap = getBitmapByView(imgcard);//iv是View
-        Drawable drawable = new BitmapDrawable(bitmap);
-        imageView.setImageDrawable(drawable);
-
-        return imageView;
-    }
 
     public void f5() {
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
