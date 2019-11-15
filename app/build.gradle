@@ -7,8 +7,8 @@ android {
         applicationId "com.dabai.qrtools"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 107
-        versionName "2.9.8"
+        versionCode 110
+        versionName "2.9.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
