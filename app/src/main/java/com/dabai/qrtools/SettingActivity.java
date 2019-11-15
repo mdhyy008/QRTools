@@ -11,6 +11,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
+import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.database.Cursor;
@@ -54,6 +57,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static android.app.Notification.EXTRA_CHANNEL_ID;
 import static android.provider.Settings.EXTRA_APP_PACKAGE;
@@ -99,15 +103,17 @@ public class SettingActivity extends PreferenceActivity {
         final Preference clip = getPreferenceManager().findPreference("clip_monitor");
         final Preference sc = getPreferenceManager().findPreference("screenshot_monitor");
         final Preference installshort = getPreferenceManager().findPreference("program_shortcuts");
+        final Preference appinfo = getPreferenceManager().findPreference("program_info");
+        appinfo.setSummary("Android版本:"+Build.VERSION.RELEASE);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P + 1) {
             clip.setEnabled(false);
             clip.setSummary("此Android版本不支持");
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P || Build.MODEL.toLowerCase().contains("vivo") || Build.MODEL.toLowerCase().contains("oppo")) {
             sc.setEnabled(false);
-            sc.setSummary("此Android版本不支持");
+            sc.setSummary("此Android版本或定制系统不支持");
         }
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
             clip.setEnabled(false);
@@ -252,6 +258,33 @@ public class SettingActivity extends PreferenceActivity {
     }
 
 
+
+    protected String getAuthorityFromPermission() {
+        // 先得到默认的Launcher
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        PackageManager mPackageManager = context.getPackageManager();
+        ResolveInfo resolveInfo = mPackageManager.resolveActivity(intent, 0);
+        if (resolveInfo == null) {
+            return null;
+        }
+        @SuppressLint("WrongConstant")
+        List<ProviderInfo> info = mPackageManager.queryContentProviders(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.applicationInfo.uid, PackageManager.GET_PROVIDERS);
+        if (info != null) {
+            for (int j = 0; j < info.size(); j++) {
+                ProviderInfo provider = info.get(j);
+                if (provider.readPermission == null) {
+                    continue;
+                }
+                if (Pattern.matches(".*launcher.*READ_SETTINGS", provider.readPermission)) {
+                    return provider.authority;
+                }
+            }
+        }
+        return null;
+    }
+
+
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
 
@@ -328,6 +361,8 @@ public class SettingActivity extends PreferenceActivity {
                 break;
 
             case "program_shortcuts":
+
+                Toast.makeText(context, ""+getAuthorityFromPermission(), Toast.LENGTH_SHORT).show();
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     final String items[] = new String[]{"生成二维码", "扫描二维码", "微信扫一扫"};

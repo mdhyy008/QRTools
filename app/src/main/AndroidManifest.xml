@@ -83,6 +83,7 @@
             android:label="设置" />
         <activity
             android:name=".WxScanActivity"
+            android:exported="true"
             android:label="调用微信扫一扫" />
         <activity
             android:name=".WebActivity"

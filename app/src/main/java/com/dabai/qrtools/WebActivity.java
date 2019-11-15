@@ -27,9 +27,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.dabai.qrtools.utils.DownloadManagerUtil;
 import com.google.android.material.snackbar.Snackbar;
@@ -181,6 +183,25 @@ public class WebActivity extends AppCompatActivity {
                                 new MaterialDialog.Builder(WebActivity.this)
                                         .title("选择一个下载器")
                                         .cancelable(false)
+                                        .positiveText("回首页")
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                ad.dismiss();
+                                                webview.loadUrl(last);
+                                                new Thread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                setTitle("首页");
+                                                            }
+                                                        });
+                                                    }
+                                                }).start();
+                                            }
+                                        })
                                         .items(new String[]{"系统下载","ADM下载"})
                                         .itemsCallback(new MaterialDialog.ListCallback() {
                                             @Override

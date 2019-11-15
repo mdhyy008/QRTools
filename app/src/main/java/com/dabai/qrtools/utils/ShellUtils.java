@@ -40,10 +40,8 @@ public class ShellUtils {
      * @param command command
      * @param isRoot  whether need to run with root
      * @return
-     * @see com.yzy.supercleanmaster.utils.ShellUtils#execCommand(String[], boolean, boolean)
      */
     public static CommandResult execCommand(String command, boolean isRoot) {
-        LogUtil.d("command = "+command);
         return execCommand(new String[]{command}, isRoot, true);
     }
 
@@ -53,7 +51,6 @@ public class ShellUtils {
      * @param commands command list
      * @param isRoot   whether need to run with root
      * @return
-     * @see com.yzy.supercleanmaster.utils.ShellUtils#execCommand(String[], boolean, boolean)
      */
     public static CommandResult execCommand(List<String> commands, boolean isRoot) {
         return execCommand(commands == null ? null : commands.toArray(new String[]{}), isRoot, true);
@@ -65,7 +62,6 @@ public class ShellUtils {
      * @param commands command array
      * @param isRoot   whether need to run with root
      * @return
-     * @see com.yzy.supercleanmaster.utils.ShellUtils#execCommand(String[], boolean, boolean)
      */
     public static CommandResult execCommand(String[] commands, boolean isRoot) {
         return execCommand(commands, isRoot, true);
@@ -78,7 +74,6 @@ public class ShellUtils {
      * @param isRoot          whether need to run with root
      * @param isNeedResultMsg whether need result msg
      * @return
-     * @see com.yzy.supercleanmaster.utils.ShellUtils#execCommand(String[], boolean, boolean)
      */
     public static CommandResult execCommand(String command, boolean isRoot, boolean isNeedResultMsg) {
         return execCommand(new String[]{command}, isRoot, isNeedResultMsg);
@@ -91,7 +86,6 @@ public class ShellUtils {
      * @param isRoot          whether need to run with root
      * @param isNeedResultMsg whether need result msg
      * @return
-     * @see com.yzy.supercleanmaster.utils.ShellUtils#execCommand(String[], boolean, boolean)
      */
     public static CommandResult execCommand(List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
         return execCommand(commands == null ? null : commands.toArray(new String[]{}), isRoot, isNeedResultMsg);
@@ -104,9 +98,6 @@ public class ShellUtils {
      * @param isRoot          whether need to run with root
      * @param isNeedResultMsg whether need result msg
      * @return <ul>
-     * <li>if isNeedResultMsg is false, {@link com.yzy.supercleanmaster.utils.ShellUtils.CommandResult#successMsg} is null and
-     * {@link com.yzy.supercleanmaster.utils.ShellUtils.CommandResult#errorMsg} is null.</li>
-     * <li>if {@link com.yzy.supercleanmaster.utils.ShellUtils.CommandResult#result} is -1, there maybe some excepiton.</li>
      * </ul>
      */
     public static CommandResult execCommand(String[] commands, boolean isRoot, boolean isNeedResultMsg) {
@@ -182,13 +173,7 @@ public class ShellUtils {
 
     /**
      * result of command
-     * <ul>
-     * <li>{@link com.yzy.supercleanmaster.utils.ShellUtils.CommandResult#result} means result of command, 0 means normal, else means error, same to excute in
-     * linux shell</li>
-     * <li>{@link com.yzy.supercleanmaster.utils.ShellUtils.CommandResult#successMsg} means success message of command result</li>
-     * <li>{@link com.yzy.supercleanmaster.utils.ShellUtils.CommandResult#errorMsg} means error message of command result</li>
-     * </ul>
-     *
+    *
      * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-5-16
      */
     public static class CommandResult {

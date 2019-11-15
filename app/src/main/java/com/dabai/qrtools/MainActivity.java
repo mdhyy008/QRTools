@@ -282,22 +282,19 @@ public class MainActivity extends AppCompatActivity {
 
         try {
 
-
-            // 扫描二维码/条码回传
+// 扫描二维码/条码回传
             if (requestCode == 5 && resultCode == RESULT_OK) {
                 if (data != null) {
 
                     Uri uri = data.getData();
                     String[] contacts = getPhoneContacts(uri);
-
                     String content = "BEGIN:VCARD\n" + "VERSION:3.0\n" + "N:" + contacts[0] + "\n" + "TEL:" + contacts[1] + "\n" + "NOTE:QRTools Share\n" + "END:VCARD";
-
                     ToRes(content);
 
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(context, "不可预知错误发生了", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "生成失败,请换一个联系人试试:"+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -319,8 +316,10 @@ public class MainActivity extends AppCompatActivity {
             Cursor phone = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                     ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + ContactId, null, null);
             if (phone != null) {
+
                 phone.moveToFirst();
                 contact[1] = phone.getString(phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
             }
             phone.close();
             cursor.close();
@@ -329,7 +328,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return contact;
     }
-
 
     public void vcf_create(View view) {
 
@@ -349,7 +347,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     //退出时的时间
     private long mExitTime;
 
@@ -367,8 +364,6 @@ public class MainActivity extends AppCompatActivity {
                                 intent.setAction(Intent.ACTION_MAIN);// "android.intent.action.MAIN"
                                 intent.addCategory(Intent.CATEGORY_HOME); //"android.intent.category.HOME"
                                 startActivity(intent);
-
-
                             }
                         }).show();
             } else {
@@ -379,10 +374,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     finish();
                 }
-
-
             }
-
             return false;
         }
         return super.onKeyDown(keyCode, event);
@@ -424,7 +416,6 @@ public class MainActivity extends AppCompatActivity {
 
     boolean isroot;
 
-
     public void wifi_config(View view) {
 
         final AlertDialog ad = new AlertDialog.Builder(this).setTitle("分享WiFi")
@@ -441,9 +432,7 @@ public class MainActivity extends AppCompatActivity {
                                     //开启定位权限,200是标识码
                                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
                                 } else {
-
                                     share_thiswifi();
-
                                 }
 
                                 break;
@@ -454,7 +443,6 @@ public class MainActivity extends AppCompatActivity {
 
                                 break;
                             case 2:
-
 
                                 final View view2 = LayoutInflater.from(context).inflate(R.layout.dialog_wifihistory, null);
                                 final AlertDialog addddddd2 = new AlertDialog.Builder(MainActivity.this)
@@ -478,11 +466,8 @@ public class MainActivity extends AppCompatActivity {
                                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         @Override
                                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
                                             try {
                                                 String text = new FileUtils().readText(new File(dir, data[i])).trim();
-
                                                 Intent resultIntent = new Intent(MainActivity.this, TextQRActivity.class);
                                                 resultIntent.putExtra("download", text);
                                                 addddddd2.dismiss();
@@ -491,11 +476,8 @@ public class MainActivity extends AppCompatActivity {
                                             } catch (FileNotFoundException e) {
                                                 e.printStackTrace();
                                             }
-
-
                                         }
                                     });
-
                                     ArrayAdapter adapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, data);
                                     lv.setAdapter(adapter);
                                 } catch (Exception e) {
