@@ -368,7 +368,6 @@ public class SettingActivity extends PreferenceActivity {
 
             case "program_shortcuts":
 
-                Toast.makeText(context, ""+getAuthorityFromPermission(), Toast.LENGTH_SHORT).show();
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     final String items[] = new String[]{"生成二维码", "扫描二维码", "微信扫一扫"};
@@ -539,11 +538,9 @@ public class SettingActivity extends PreferenceActivity {
                         })
                         .show();
 
-
                 Window window2 = addd.getWindow();//对话框窗口
                 window2.setGravity(Gravity.TOP);//设置对话框显示在屏幕中间
                 window2.setWindowAnimations(R.style.dialog_style_top);//添加动画
-
 
                 break;
 

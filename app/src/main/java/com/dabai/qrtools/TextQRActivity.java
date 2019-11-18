@@ -22,7 +22,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,8 +46,6 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.zxing.BarcodeFormat;
@@ -59,10 +56,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.wildma.pictureselector.PictureSelector;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -124,10 +118,31 @@ public class TextQRActivity extends AppCompatActivity {
         imgcard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    hideInput();
-                } catch (Exception e) {
-                }
+
+                imageView = (ImageView) findViewById(R.id.image_view);
+
+                //展示在dialog上面的大图
+                dialog = new Dialog(TextQRActivity.this, android.R.style.Theme_NoTitleBar_Fullscreen);
+
+                WindowManager.LayoutParams attributes = getWindow().getAttributes();
+                attributes.width = WindowManager.LayoutParams.MATCH_PARENT;
+                attributes.height = WindowManager.LayoutParams.MATCH_PARENT;
+                dialog.getWindow().setAttributes(attributes);
+
+                image = getImageView();
+                dialog.setContentView(image);
+
+                //大图的点击事件（点击让他消失）
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+
+
             }
         });
 
@@ -368,6 +383,30 @@ public class TextQRActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    private ImageView imageView;
+    private Dialog dialog;
+    private ImageView image;
+
+
+    //动态的ImageView
+    private ImageView getImageView() {
+        ImageView imageView = new ImageView(this);
+
+        //宽高
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        //imageView设置图片
+        @SuppressLint("ResourceType")
+        CardView imgcard = findViewById(R.id.QR_create_imgcard);
+        Bitmap bitmap = getBitmapByView(imgcard);//iv是View
+        Drawable drawable = new BitmapDrawable(bitmap);
+        imageView.setImageDrawable(drawable);
+
+        return imageView;
+    }
+
 
 
     public void save_QR(View view) {

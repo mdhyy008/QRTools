@@ -202,7 +202,7 @@ public class WebActivity extends AppCompatActivity {
                                                 }).start();
                                             }
                                         })
-                                        .items(new String[]{"系统下载","ADM下载"})
+                                        .items(new String[]{"系统下载","ADM下载","其他方式下载"})
                                         .itemsCallback(new MaterialDialog.ListCallback() {
                                             @Override
                                             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -242,15 +242,16 @@ public class WebActivity extends AppCompatActivity {
                                                         }
 
                                                         break;
+                                                    case 2:
+
+                                                        Uri uri = Uri.parse(url);
+                                                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                                        startActivity(intent);
+                                                        break;
                                                 }
-
-
-
                                             }
                                         })
                                         .show();
-
-
 
                             }
                         }).show();
