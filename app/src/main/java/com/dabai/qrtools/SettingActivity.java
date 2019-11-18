@@ -299,21 +299,27 @@ public class SettingActivity extends PreferenceActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                File dir = new File("/sdcard/二维码助手/");
-                                File tmpimg = new File("/sdcard/PictureSelector.temp.jpg");
 
-                                new DabaiUtils().deleteDir(new File("/sdcard/QRTcrash/"));
-                                new DabaiUtils().deleteDir(new File("/sdcard/QRTWifi/"));
-                                for (File file : dir.listFiles()) {
-                                    if (file.delete()) {
-                                        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                                try {
+                                    File dir = new File("/sdcard/二维码助手/");
+                                    File tmpimg = new File("/sdcard/PictureSelector.temp.jpg");
+
+                                    new DabaiUtils().deleteDir(new File("/sdcard/QRTcrash/"));
+                                    new DabaiUtils().deleteDir(new File("/sdcard/QRTWifi/"));
+                                    for (File file : dir.listFiles()) {
+                                        if (file.delete()) {
+                                            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                                        }
                                     }
+
+                                    tmpimg.delete();
+                                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(tmpimg)));
+
+                                    Toast.makeText(context, "清理完成!", Toast.LENGTH_SHORT).show();
+                                } catch (Exception e) {
+                                    Toast.makeText(context, "清理失败!", Toast.LENGTH_SHORT).show();
+                                    //e.printStackTrace();
                                 }
-
-                                tmpimg.delete();
-                                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(tmpimg)));
-
-                                Toast.makeText(context, "清理完成", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .show();
@@ -429,26 +435,43 @@ public class SettingActivity extends PreferenceActivity {
                 break;
             case "other_version":
 
-                //new DabaiUtils().openLink(this, "https://github.com/dabai2017/QRTools/releases");
+                if (new DabaiUtils().checkApkExist(context,"com.coolapk.market")){
 
-                adddd = new AlertDialog.Builder(this).setTitle("更新")
-                        .setMessage("当前版本 : " + new DabaiUtils().getVersionName(getApplicationContext())
-                                + "\n酷安最新版本 : " + "正在检查")
-                        .setPositiveButton("跳转应用市场", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Intent.ACTION_VIEW);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.setData(Uri.parse("market://details?id=" + getPackageName()));
-                                if (intent.resolveActivity(getPackageManager()) != null) {
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(context, "您的系统中没有安装应用市场", Toast.LENGTH_SHORT).show();
+                    adddd = new AlertDialog.Builder(this).setTitle("更新")
+                            .setMessage("当前版本 : " + new DabaiUtils().getVersionName(getApplicationContext())
+                                    + "\n酷安最新版本 : " + "正在检查")
+                            .setPositiveButton("跳转酷安", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    try {
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        intent.setPackage("com.coolapk.market");
+                                        intent.setData(Uri.parse("https://www.coolapk.com/apk/com.dabai.qrtools"));
+                                        startActivity(intent);
+                                    } catch (Exception e) {
+                                        Toast.makeText(context, "打开失败!"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+
                                 }
-                            }
-                        })
-                        .show();
+                            })
+                            .show();
 
+                }else {
+                    adddd = new AlertDialog.Builder(this).setTitle("更新")
+                            .setMessage("当前版本 : " + new DabaiUtils().getVersionName(getApplicationContext())
+                                    + "\n酷安最新版本 : " + "正在检查")
+                            .setPositiveButton("跳转更新页面", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(SettingActivity.this, WebActivity.class);
+                                    intent.putExtra("link", "https://www.coolapk.com/apk/com.dabai.qrtools");
+                                    startActivity(intent);
+                                }
+                            })
+                            .show();
+                }
 
                 Window windowver = adddd.getWindow();//对话框窗口
                 windowver.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
@@ -483,7 +506,6 @@ public class SettingActivity extends PreferenceActivity {
                     Window window1 = add.getWindow();//对话框窗口
                     window1.setGravity(Gravity.TOP);//设置对话框显示在屏幕中间
                     window1.setWindowAnimations(R.style.dialog_style_top);//添加动画
-
 
                     try {
                         // Android 8.0使用startForegroundService在前台启动新服务
