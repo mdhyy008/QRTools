@@ -98,8 +98,6 @@ public class WIFIandroid extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-
-
                 ClipboardManager clipboardManager = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData mclipData = ClipData.newPlainText("Label","WiFi名称 : " + wifiInfos.get(i).ssid + "\n密码 : " + wifiInfos.get(i).password );
                 clipboardManager.setPrimaryClip(mclipData);

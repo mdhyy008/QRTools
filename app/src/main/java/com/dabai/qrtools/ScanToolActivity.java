@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -104,7 +105,19 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ToResult(result_end);
+
+                        String his = get_sharedString("QR_scan","");
+
                         finish();
+
+                        for (String a : his.split("@@@")){
+                            if (a.equals(result_end)){
+                                return;
+                            }
+                        }
+
+                        set_sharedString("QR_scan",his+result_end+"@@@");
+
                     }
                 }).create();
 
@@ -341,9 +354,9 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
         if (checkResult1 != PackageManager.PERMISSION_GRANTED) {
 
             new AlertDialog.Builder(this).setTitle("权限申请")
-                    .setMessage("不给我相机权限，我就不工作了哦!(/≧▽≦)/")
+                    .setMessage("如果没有相机权限，二维码扫描是不能工作的!")
                     .setCancelable(false)
-                    .setNeutralButton("我就不给你", new DialogInterface.OnClickListener() {
+                    .setNeutralButton("拒绝", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             finish();
@@ -447,6 +460,23 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
     }
 
 
+    /**
+     * 提交与获取
+     *
+     * @param key
+     * @param value
+     */
+    public void set_sharedString(String key, String value) {
+        SharedPreferences sp = this.getSharedPreferences("data", 0);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public String get_sharedString(String key, String moren) {
+        SharedPreferences sp = this.getSharedPreferences("data", 0);
+        return sp.getString(key, moren);
+    }
 
 
 }

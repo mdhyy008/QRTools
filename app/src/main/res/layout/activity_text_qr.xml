@@ -32,6 +32,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/QR_create_input"
                         android:layout_width="match_parent"
@@ -50,9 +51,26 @@
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <Button
+                            android:background="?android:attr/selectableItemBackgroundBorderless"
+                            android:padding="13dp"
+                            android:layout_alignParentRight="true"
+                            android:id="@+id/add_history"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="加入历史记录"
+                            android:textColor="@color/colorAccent"
+                            style="@style/Widget.AppCompat.ButtonBar"/>
+                    </RelativeLayout>
+
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
 
 
 

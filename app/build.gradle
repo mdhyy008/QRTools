@@ -7,7 +7,7 @@ android {
         applicationId "com.dabai.qrtools"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 125
+        versionCode 165
         versionName "2.9.9_"+versionCode
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -50,4 +50,5 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.7'
     implementation files('libs/BASE64.jar')
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
+    implementation 'com.google.code.gson:gson:2.8.1'
 }

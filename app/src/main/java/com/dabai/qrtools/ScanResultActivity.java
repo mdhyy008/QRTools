@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.wifi.WifiInfo;
@@ -584,7 +585,7 @@ public class ScanResultActivity extends AppCompatActivity {
 
                 try {
                     HtmlUtils hu = new HtmlUtils();
-                    String html = hu.getHtml(goodlink);
+                    String html = hu.getHtml(goodlink+"&app_id=lranbrlrwwphbmnm&app_secret=R0p3aHE5K2V1ZXVGWXRBbVNJaEd2Zz09");
 
                     jo = new JSONObject(html);
 
@@ -595,8 +596,8 @@ public class ScanResultActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 String msg = jo.getString("msg");
-
-                                if (msg.equals("数据返回成功")) {
+                                //Log.d(TAG, "run: "+msg);
+                                if (msg.contains("数据返回成功")) {
 
                                     jo2 = new JSONObject(jo.getString("data"));
 
@@ -922,5 +923,24 @@ public class ScanResultActivity extends AppCompatActivity {
             Toast.makeText(this, "未找到蓝奏云标识", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+
+    /**
+     * 提交与获取
+     *
+     * @param key
+     * @param value
+     */
+    public void set_sharedString(String key, String value) {
+        SharedPreferences sp = this.getSharedPreferences("data", 0);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public String get_sharedString(String key, String moren) {
+        SharedPreferences sp = this.getSharedPreferences("data", 0);
+        return sp.getString(key, moren);
     }
 }

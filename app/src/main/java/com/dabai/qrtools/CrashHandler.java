@@ -106,7 +106,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             public void run() {
                 Looper.prepare();
                 Toast.makeText(mContext, "捕获到异常:" + eeeee, Toast.LENGTH_LONG).show();
-/*
+
+                if (Build.MODEL.equals("ONEPLUS A6000") && Build.VERSION.RELEASE.equals("8.1.0")){
+                    return;
+                }
 
                 new Thread(new Runnable() {
 
@@ -129,12 +132,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                     }
                 }).start();
 
-*/
-
-
                 Looper.loop();
             }
         }.start();
+
         collectErrorMessages();
         saveErrorMessages(e);
         return false;

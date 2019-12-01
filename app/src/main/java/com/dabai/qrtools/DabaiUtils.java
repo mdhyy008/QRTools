@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 import java.util.Enumeration;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -49,6 +50,28 @@ public class DabaiUtils {
      创建日期 2019.5.9
      创建类型 工具类
      **/
+
+
+    private String formetFileSize(File file){
+        String fileSize = "0B";
+        if (file == null){
+            fileSize = "文件不存在";
+            return fileSize;
+        }
+        long fileLength = file.length();
+        DecimalFormat df = new DecimalFormat("#.00");
+        if (fileLength < 1024){
+            fileSize = df.format((double) fileLength) + "B";
+        }else if (fileLength < 1048576){
+            fileSize = df.format((double) fileLength / 1024) + "KB";
+        }else if (fileLength < 1073741824){
+            fileSize = df.format((double) fileLength / 1048576) + "MB";
+        }else{
+            fileSize = df.format((double) fileLength / 1073741824) + "GB";
+        }
+        return fileSize;
+    }
+
 
 
     /**

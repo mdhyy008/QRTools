@@ -8,6 +8,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +23,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -48,6 +51,8 @@ import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -63,7 +68,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -83,6 +90,9 @@ public class TextQRActivity extends AppCompatActivity {
     private String TAG = "dabaizzz";
 
 
+    Button add_history;
+    static Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,9 +100,12 @@ public class TextQRActivity extends AppCompatActivity {
 
         setTitle("二维码生成");
 
+        context = getApplicationContext();
         img = findViewById(R.id.QR_create_imageView);
         til = findViewById(R.id.QR_create_input);
         cons = findViewById(R.id.cons);
+
+        add_history = findViewById(R.id.add_history);
 
         Intent intent2 = getIntent();
         String downlink = intent2.getStringExtra("download");
@@ -185,6 +198,12 @@ public class TextQRActivity extends AppCompatActivity {
                                                                 QRColor = Color.parseColor("#000000");
 
                                                                 Bitmap bit = createQRCodeBitmap(edit.getText().toString(), 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+
+                                                                if (bit == null){
+                                                                    Toast.makeText(TextQRActivity.this, "生成失败:最多可容纳1850个大写字母或2710个数字或1108个字节，或500多个汉字!", Toast.LENGTH_SHORT).show();
+                                                                    return;
+                                                                }
+
                                                                 img.setImageBitmap(bit);
                                                                 try {
                                                                     hideInput();
@@ -219,6 +238,12 @@ public class TextQRActivity extends AppCompatActivity {
                                                     public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
                                                         QRColor = selectedColor;
                                                         Bitmap bit = createQRCodeBitmap(edit.getText().toString(), 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+
+                                                        if (bit == null){
+                                                            Toast.makeText(TextQRActivity.this, "生成失败:最多可容纳1850个大写字母或2710个数字或1108个字节，或500多个汉字!", Toast.LENGTH_SHORT).show();
+                                                            return;
+                                                        }
+
                                                         img.setImageBitmap(bit);
                                                         is_rad = false;
                                                         try {
@@ -254,6 +279,12 @@ public class TextQRActivity extends AppCompatActivity {
                                                     public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
                                                         QRBackColor = selectedColor;
                                                         Bitmap bit = createQRCodeBitmap(edit.getText().toString(), 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+
+                                                        if (bit == null){
+                                                            Toast.makeText(TextQRActivity.this, "生成失败:最多可容纳1850个大写字母或2710个数字或1108个字节，或500多个汉字!", Toast.LENGTH_SHORT).show();
+                                                            return;
+                                                        }
+
                                                         img.setImageBitmap(bit);
                                                         try {
                                                             hideInput();
@@ -332,12 +363,52 @@ public class TextQRActivity extends AppCompatActivity {
                 if (!text.isEmpty()) {
                     QRColor = Color.BLACK;
                     Bitmap bit = createQRCodeBitmap(text, 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+
+                    if (bit == null){
+                        Toast.makeText(TextQRActivity.this, "生成失败:最多可容纳1850个大写字母或2710个数字或1108个字节，或500多个汉字!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     img.setImageBitmap(bit);
                     isOK = true;
 
                 } else {
                     Snackbar.make(cons, "无内容，不生成", Snackbar.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+
+
+
+        add_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /**
+                 * 添加到历史记录
+                 */
+
+               String his = get_sharedString("QR_create","");
+
+               String text = til.getEditText().getText().toString();
+
+               for (String a : his.split("@@@")){
+                   if (a.equals(text)){
+                       add_history.setText("已存在!");
+                       return;
+                   }
+               }
+
+                Bitmap bit = createQRCodeBitmap(edit.getText().toString(), 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+
+                if (bit == null){
+                    add_history.setText("超出最大长度，不能添加!");
+                    return;
+                }
+
+               set_sharedString("QR_create",his+text+"@@@");
+               add_history.setText("添加成功!");
+
             }
         });
 
@@ -349,6 +420,26 @@ public class TextQRActivity extends AppCompatActivity {
         }
 
     }
+
+
+    /**
+     * 提交与获取
+     *
+     * @param key
+     * @param value
+     */
+    public void set_sharedString(String key, String value) {
+        SharedPreferences sp = this.getSharedPreferences("data", 0);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public String get_sharedString(String key, String moren) {
+        SharedPreferences sp = this.getSharedPreferences("data", 0);
+        return sp.getString(key, moren);
+    }
+
 
     /**
      * 加载本地图片
@@ -536,6 +627,7 @@ public class TextQRActivity extends AppCompatActivity {
 
             /** 3.创建像素数组,并根据BitMatrix(位矩阵)对象为数组元素赋颜色值 */
             int[] pixels = new int[width * height];
+
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     //bitMatrix.get(x,y)方法返回true是黑色色块，false是白色色块
@@ -551,7 +643,6 @@ public class TextQRActivity extends AppCompatActivity {
             bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
             return bitmap;
         } catch (WriterException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -642,6 +733,12 @@ public class TextQRActivity extends AppCompatActivity {
 
             QRColor = Color.BLACK;
             Bitmap bit = createQRCodeBitmap(resul, 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+
+            if (bit == null){
+                Toast.makeText(TextQRActivity.this, "生成失败:最多可容纳1850个大写字母或2710个数字或1108个字节，或500多个汉字!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             img.setImageBitmap(bit);
             isOK = true;
             Snackbar.make(cons, "转换完成！", Snackbar.LENGTH_SHORT).show();
@@ -733,6 +830,12 @@ public class TextQRActivity extends AppCompatActivity {
 
                                 QRColor = Color.BLACK;
                                 Bitmap bit = createQRCodeBitmap(txt, 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+
+                                if (bit == null){
+                                    Toast.makeText(TextQRActivity.this, "生成失败:最多可容纳1850个大写字母或2710个数字或1108个字节，或500多个汉字!", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
                                 img.setImageBitmap(bit);
                                 isOK = true;
                                 Snackbar.make(cons, "加密完成！", Snackbar.LENGTH_SHORT).show();
@@ -765,6 +868,12 @@ public class TextQRActivity extends AppCompatActivity {
         if (!text.isEmpty()) {
             QRColor = Color.BLACK;
             Bitmap bit = createQRCodeBitmap(text, 700, 700, "UTF-8", "H", "1", QRColor, QRBackColor);
+
+            if (bit == null){
+                Toast.makeText(TextQRActivity.this, "生成失败:最多可容纳1850个大写字母或2710个数字或1108个字节，或500多个汉字!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             img.setImageBitmap(bit);
             isOK = true;
             Snackbar.make(cons, "转换完成！", Snackbar.LENGTH_SHORT).show();

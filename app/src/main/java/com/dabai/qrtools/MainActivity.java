@@ -19,6 +19,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -49,6 +51,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -90,6 +93,12 @@ public class MainActivity extends AppCompatActivity {
     private boolean clip_monitor, easy, screenshot_monitor;
     private Intent screenintent, clipintent;
     private RadioGroup rg;
+
+
+    TextView btn_create,btn_scan;
+    private String[] data1;
+
+
 
 
     @Override
@@ -152,6 +161,211 @@ public class MainActivity extends AppCompatActivity {
         init();
 
 
+        btn_create = findViewById(R.id.btn_create);
+        btn_scan = findViewById(R.id.btn_scan);
+
+        btn_create.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                final View view3 = LayoutInflater.from(context).inflate(R.layout.dialog_wifihistory, null);
+                final AlertDialog addddddd2 = new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("二维码生成 - 历史记录")
+                        .setView(view3)
+                        .setPositiveButton("关闭", null)
+                        .setNeutralButton("清空", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                set_sharedString("QR_create","");
+                                Toast.makeText(context, "清空历史记录完成!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .show();
+
+
+                Window window2 = addddddd2.getWindow();//对话框窗口
+                window2.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
+                window2.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
+
+                ListView lv = view3.findViewById(R.id.lv);
+                TextView tv = view3.findViewById(R.id.textView4);
+
+                final String data = get_sharedString("QR_create","");
+
+                data1 = data.split("@@@");
+                String[] data2 = new String[data1.length];
+
+
+                for (int i = 0;i<data1.length;i++){
+                    String datatmp = data1[i];
+                    if (datatmp.length() > 10){
+                        data2[i] = datatmp.substring(0,5)+"..."+datatmp.substring(datatmp.length()-5);
+                    }else {
+                        data2[i] = datatmp;
+                    }
+                }
+
+
+                data2 = reverseArray(data2);
+                data1 = reverseArray(data1);
+
+                if (data.equals("")){
+                    tv.setVisibility(View.VISIBLE);
+                    lv.setVisibility(View.GONE);
+                }else {
+                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                            ToRes(data1[i]);
+                            addddddd2.dismiss();
+
+                        }
+                    });
+
+
+                    lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                            Toast toast = Toast.makeText(getApplicationContext(), ""+data1[i], Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.TOP, 0, 0);
+                            toast.show();
+
+                            return true;
+                        }
+                    });
+
+                    ArrayAdapter adapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, data2);
+                    lv.setAdapter(adapter);
+                }
+
+                return true;
+            }
+        });
+
+
+        btn_scan.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                final View view3 = LayoutInflater.from(context).inflate(R.layout.dialog_wifihistory, null);
+                final AlertDialog addddddd2 = new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("二维码扫描 - 历史记录")
+                        .setView(view3)
+                        .setPositiveButton("关闭", null)
+                        .setNeutralButton("清空", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                set_sharedString("QR_scan","");
+                                Toast.makeText(context, "清空历史记录完成!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .show();
+
+
+                Window window2 = addddddd2.getWindow();//对话框窗口
+                window2.setGravity(Gravity.BOTTOM);//设置对话框显示在屏幕中间
+                window2.setWindowAnimations(R.style.dialog_style_bottom);//添加动画
+
+                ListView lv = view3.findViewById(R.id.lv);
+                TextView tv = view3.findViewById(R.id.textView4);
+
+                final String data = get_sharedString("QR_scan","");
+
+                data1 = data.split("@@@");
+                String[] data2 = new String[data1.length];
+
+                for (int i = 0;i<data1.length;i++){
+                    String datatmp = data1[i];
+                    if (datatmp.length() > 10){
+                        data2[i] = datatmp.substring(0,5)+"..."+datatmp.substring(datatmp.length()-5);
+                    }else {
+                        data2[i] = datatmp;
+                    }
+                }
+
+                data2 = reverseArray(data2);
+                data1 = reverseArray(data1);
+
+                if (data.equals("")){
+                    tv.setVisibility(View.VISIBLE);
+                    lv.setVisibility(View.GONE);
+                }else {
+                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                            ToResult(data1[i]);
+                            addddddd2.dismiss();
+
+                        }
+                    });
+
+
+                    lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                            Toast toast = Toast.makeText(getApplicationContext(), ""+data1[i], Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.TOP, 0, 0);
+                            toast.show();
+
+                            return true;
+                        }
+                    });
+
+
+                    ArrayAdapter adapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, data2);
+                    lv.setAdapter(adapter);
+                }
+
+                return true;
+            }
+        });
+    }
+
+
+    /**
+     * 反转数组
+     * @return
+     */
+    public static String[] reverseArray(String[] array){
+        String [] newArray = new String[array.length];
+        for(int i=0; i<newArray.length; i++){
+            newArray[i] = array[array.length - i - 1];
+        }
+        return newArray;
+    }
+
+
+
+    void ToResult(String data) {
+
+        if (data != null) {
+            String result = data;
+            Intent intent = new Intent(this, ScanResultActivity.class);
+            intent.putExtra("result", result);
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * 提交与获取
+     *
+     * @param key
+     * @param value
+     */
+    public void set_sharedString(String key, String value) {
+        SharedPreferences sp = this.getSharedPreferences("data", 0);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public String get_sharedString(String key, String moren) {
+        SharedPreferences sp = this.getSharedPreferences("data", 0);
+        return sp.getString(key, moren);
     }
 
 
@@ -294,7 +508,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(context, "生成失败,请换一个联系人试试:"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "生成失败,请换一个联系人试试:" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -627,21 +841,7 @@ public class MainActivity extends AppCompatActivity {
     //显示wifi选择弹窗
     private void showWifi() {
 
-
-        /**
-         * 判断需要跳转到哪个界面
-         */
-
-
-        if (Build.VERSION.SDK_INT >= 26) {
-
-            startActivity(new Intent(this, WIFIandroid.class));
-
-        } else {
-            startActivity(new Intent(this, WIFIandroid.class));
-        }
-
-
+        startActivity(new Intent(this, WIFIandroid.class));
     }
 
 
@@ -708,4 +908,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+
 }
