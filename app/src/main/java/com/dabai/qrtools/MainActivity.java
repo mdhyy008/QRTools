@@ -94,12 +94,8 @@ public class MainActivity extends AppCompatActivity {
     private Intent screenintent, clipintent;
     private RadioGroup rg;
 
-
     TextView btn_create,btn_scan;
     private String[] data1;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
