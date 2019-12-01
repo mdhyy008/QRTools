@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     float alpha = 0;
     private String TAG = "dabaizzz";
     private int REQUEST_CODE_SCAN = 100;
-    private boolean clip_monitor, easy, screenshot_monitor;
+    private boolean clip_monitor, screenshot_monitor;
     private Intent screenintent, clipintent;
     private RadioGroup rg;
 
@@ -104,16 +104,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Ui美化
         SharedPreferences sp = this.getSharedPreferences("com.dabai.qrtools_preferences", 0);
-        easy = sp.getBoolean("easy", false);
 
-        if (easy) {
-            setContentView(R.layout.activity_main_bak);
-
-        } else {
-            setContentView(R.layout.activity_main);
-            getSupportActionBar().setElevation(0);
-        }
-
+        setContentView(R.layout.activity_main);
+        getSupportActionBar().setElevation(0);
 
         context = getApplicationContext();
 

@@ -16,12 +16,6 @@
             android:summary="浏览器打开调用Chrome CustomTabs打开网页"
             android:title="CustomTabs支持" />
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:icon="@mipmap/fx"
-            android:key="easy"
-            android:title="主页精简样式" />
-
         <PreferenceScreen
             android:icon="@mipmap/fj"
             android:key="program_shortcuts"
