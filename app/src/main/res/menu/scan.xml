@@ -3,6 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/sc_other"
-        android:title="其他方式"
+        android:title="图库选择"
         app:showAsAction="always"/>
 </menu>

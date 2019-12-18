@@ -4,7 +4,7 @@
 	<shortcut
         android:enabled="true"
         android:shortcutId="二维码生成"
-		android:icon="@drawable/ic_create"
+		android:icon="@mipmap/qr_create3"
 		android:shortcutShortLabel="@string/sc_create">
 		<intent
             android:action="android.intent.action.VIEW"
@@ -15,7 +15,7 @@
 	
 	<shortcut
         android:enabled="true"
-		android:icon="@drawable/ic_scan"
+		android:icon="@mipmap/qr_scan4"
         android:shortcutId="扫描二维码"
         android:shortcutShortLabel="@string/sc_scan"
         android:shortcutDisabledMessage="@string/sc_dismess">
@@ -28,7 +28,7 @@
 
 	<shortcut
 		android:enabled="true"
-		android:icon="@drawable/ic_scan"
+		android:icon="@mipmap/wx_scan2"
 		android:shortcutId="微信扫一扫"
 		android:shortcutShortLabel="@string/sc_wxscan">
 		<intent

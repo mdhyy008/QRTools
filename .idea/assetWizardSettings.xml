@@ -24,6 +24,19 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
+                                                <entry key="opacityPercent" value="80" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                      <entry key="image">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="color" value="000000" />
+                                                <entry key="opacityPercent" value="60" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -33,7 +46,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="theme" value="HOLO_DARK" />
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="imageAsset" value="C:\Users\Baymax\Desktop\gr.png" />
+                                      <entry key="outputName" value="grally1" />
                                       <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>
@@ -86,9 +101,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
                                       <entry key="backgroundImage" value="C:\Users\Baymax\Desktop\qricon.svg" />
-                                      <entry key="foregroundImage" value="C:\Users\Baymax\Desktop\ic_lau.png" />
+                                      <entry key="foregroundImage" value="C:\Users\Baymax\Desktop\qrcreate.png" />
                                       <entry key="outputName" value="iconround" />
                                     </map>
                                   </option>
@@ -117,7 +131,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="trimmed" value="true" />
+                                                <entry key="paddingPercent" value="25" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -128,9 +142,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\Baymax\Desktop\ic_launcher.png" />
-                                      <entry key="outputName" value="ic_launcher5" />
+                                      <entry key="cropped" value="true" />
+                                      <entry key="imageAsset" value="C:\Users\Baymax\Desktop\sccc.png" />
+                                      <entry key="outputName" value="qr_scan4" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -174,6 +188,11 @@
                                 </PersistentState>
                               </value>
                             </entry>
+                          </map>
+                        </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>

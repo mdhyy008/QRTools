@@ -132,7 +132,7 @@ public class TextQRActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                imageView = (ImageView) findViewById(R.id.image_view);
+                //imageView = (ImageView) findViewById(R.id.image_view);
 
                 //展示在dialog上面的大图
                 dialog = new Dialog(TextQRActivity.this, android.R.style.Theme_NoTitleBar_Fullscreen);
@@ -476,7 +476,6 @@ public class TextQRActivity extends AppCompatActivity {
     }
 
 
-    private ImageView imageView;
     private Dialog dialog;
     private ImageView image;
 
