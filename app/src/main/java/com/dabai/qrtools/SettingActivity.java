@@ -370,7 +370,7 @@ public class SettingActivity extends PreferenceActivity {
 
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    final String items[] = new String[]{"生成二维码", "扫描二维码", "微信扫一扫"};
+                    final String items[] = new String[]{"生成二维码", "扫描二维码", "微信扫一扫","WiFi共享"};
 
                     AlertDialog ad = new AlertDialog.Builder(this).setTitle("选择快捷方式").setItems(items, new DialogInterface.OnClickListener() {
                         @SuppressLint("WrongConstant")
@@ -380,14 +380,14 @@ public class SettingActivity extends PreferenceActivity {
                                 case "生成二维码":
                                     //安装了 扫码工具
                                     Intent intent1 = new Intent(context, TextQRActivity.class);
-                                    addShortCut(context, "生成二维码", R.drawable.ic_create, intent1);
+                                    addShortCut(context, "生成二维码", R.mipmap.qr_create3, intent1);
                                     break;
 
                                 case "扫描二维码":
                                     //安装了 扫码工具
                                     Intent intent2 = new Intent();
                                     intent2.setClassName("com.dabai.qrtools", "com.dabai.qrtools.ScanToolActivity");
-                                    addShortCut(context, "扫描二维码", R.drawable.ic_scan, intent2);
+                                    addShortCut(context, "扫描二维码", R.mipmap.qr_scan4, intent2);
                                     break;
                                 case "微信扫一扫":
 
@@ -396,9 +396,15 @@ public class SettingActivity extends PreferenceActivity {
                                     intent3.putExtra("LauncherUI.From.Scaner.Shortcut", true);
                                     intent3.setFlags(335544320);
                                     intent3.setAction("android.intent.action.VIEW");
-                                    addShortCut(context, "微信扫一扫", R.drawable.ic_scan, intent3);
+                                    addShortCut(context, "微信扫一扫", R.mipmap.wx_scan2, intent3);
                                     break;
 
+                                case "WiFi共享":
+                                    //安装了 扫码工具
+                                    Intent intent4 = new Intent();
+                                    intent4.setClassName("com.dabai.qrtools", "com.dabai.qrtools.activity.WIFIandroid");
+                                    addShortCut(context, "WiFi共享", R.mipmap.shortwifi, intent4);
+                                    break;
                             }
                         }
                     }).show();
