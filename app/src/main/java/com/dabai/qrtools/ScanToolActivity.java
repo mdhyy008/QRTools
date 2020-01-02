@@ -83,6 +83,11 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Intent intent = getIntent();
+
+        String getdata = "" + intent.getData();
+        new AlertDialog.Builder(this).setTitle("结果").setMessage(""+getdata).show();
+
 
         //是否阻止截图
         if (Control.is_sc) {

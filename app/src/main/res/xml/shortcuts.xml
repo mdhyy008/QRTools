@@ -37,4 +37,19 @@
 			android:targetPackage="com.dabai.qrtools">
 		</intent>
 	</shortcut>
+
+
+	<shortcut
+		android:enabled="true"
+		android:icon="@mipmap/shortwifi"
+		android:shortcutId="WIFI共享"
+		android:shortcutShortLabel="@string/shortwifi">
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:targetClass="com.dabai.qrtools.activity.WIFIandroid"
+			android:targetPackage="com.dabai.qrtools">
+		</intent>
+	</shortcut>
+
+
 </shortcuts>

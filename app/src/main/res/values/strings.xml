@@ -3,6 +3,7 @@
     <string name="sc_create">二维码生成</string>
     <string name="sc_scan">扫描二维码</string>
     <string name="sc_wxscan">微信扫一扫</string>
+    <string name="shortwifi">WIFI共享</string>
     <string name="sc_dismess">你没有安装扫描软件,去主界面点击扫描二维码安装</string>
     <string name="title_activity_qqshare2">QQshare2Activity</string>
 

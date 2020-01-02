@@ -1,17 +1,21 @@
 package com.dabai.qrtools.activity;
 
 
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -20,17 +24,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dabai.qrtools.MainActivity;
 import com.dabai.qrtools.R;
 import com.dabai.qrtools.TextQRActivity;
 import com.dabai.qrtools.utils.WifiInfo;
 import com.dabai.qrtools.utils.WifiManage;
 
+import java.io.IOException;
 import java.util.List;
 
 public class WIFIandroid extends AppCompatActivity {
 
     private WifiManage wifiManage;
     private String TAG = "dabaizzz";
+    private boolean isroot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +49,10 @@ public class WIFIandroid extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-        wifiManage = new WifiManage();
+
+        suthread();
 
 
-        try {
-            Init();
-        } catch (Exception e) {
-            Log.d(TAG, "onCreate: " + e);
-        }
 
 
     }
@@ -66,6 +69,47 @@ public class WIFIandroid extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void suthread() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                isroot = isRoot();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (!isroot) {
+
+                            finish();
+
+                            Toast toast = Toast.makeText(getApplicationContext(), "没有ROOT权限，不能进行WIFI共享", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+
+                        }else {
+
+                            wifiManage = new WifiManage();
+
+
+                            try {
+                                Init();
+                            } catch (Exception e) {
+                                Log.d(TAG, "onCreate: " + e);
+                            }
+
+
+                        }
+                    }
+                });
+            }
+        }).start();
+
+
+    }
+
+
 
 
     public void Init() throws Exception {
@@ -119,6 +163,25 @@ public class WIFIandroid extends AppCompatActivity {
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         resultIntent.putExtra("download", text);
         startActivity(resultIntent);
+
+    }
+
+    private boolean isRoot() {
+        try {
+            Process process = Runtime.getRuntime().exec("su");
+            process.getOutputStream().write("exit\n".getBytes());
+            process.getOutputStream().flush();
+
+            int i = process.waitFor();
+            if (0 == i) {
+                process = Runtime.getRuntime().exec("su");
+                return true;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
 
     }
 

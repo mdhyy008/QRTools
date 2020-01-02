@@ -24,7 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="opacityPercent" value="80" />
+                                                <entry key="opacityPercent" value="60" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -47,7 +47,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Baymax\Desktop\gr.png" />
+                                      <entry key="imageAsset" value="C:\Users\Baymax\Desktop\wifi.png" />
                                       <entry key="outputName" value="grally1" />
                                       <entry key="themeColor" value="ffffff" />
                                     </map>
@@ -143,8 +143,8 @@
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="cropped" value="true" />
-                                      <entry key="imageAsset" value="C:\Users\Baymax\Desktop\sccc.png" />
-                                      <entry key="outputName" value="qr_scan4" />
+                                      <entry key="imageAsset" value="C:\Users\Baymax\Desktop\wifi.png" />
+                                      <entry key="outputName" value="shortwifi" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -192,7 +192,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
+                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
                           </map>
                         </option>
                       </PersistentState>
