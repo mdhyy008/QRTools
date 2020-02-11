@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cons"
     android:layout_width="fill_parent"
+    android:background="#ffffff"
     android:layout_height="fill_parent">
     <ScrollView
         android:layout_width="match_parent"

@@ -69,6 +69,8 @@ public class ScanResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
+        getSupportActionBar().setElevation(0);
+
         Intent intent = getIntent();
         String result = intent.getStringExtra("result");
         //dark

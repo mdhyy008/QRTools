@@ -44,6 +44,8 @@ public class WIFIandroid extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifiandroid);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
+
 
         //dark
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

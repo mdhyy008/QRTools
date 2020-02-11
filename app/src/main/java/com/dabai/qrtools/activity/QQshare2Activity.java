@@ -12,9 +12,11 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+
 import com.dabai.qrtools.R;
 import com.dabai.qrtools.TextQRActivity;
 import com.dabai.qrtools.utils.Base64;
+
 
 
 public class QQshare2Activity extends Activity {
@@ -40,14 +42,6 @@ public class QQshare2Activity extends Activity {
                 finish();
                 ToRes(link);
 
-
-               /*
-                Toast toast = Toast.makeText(this, "邀请好友使用QQ扫一扫即可", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-                */
-
-
                 Display display = getWindowManager().getDefaultDisplay();
                 // 获取屏幕高度
                 int height = display.getHeight()/2;
@@ -55,7 +49,6 @@ public class QQshare2Activity extends Activity {
                 View toastRoot = LayoutInflater.from(getApplicationContext()).inflate(R.layout.toast_wangzhe, null);
                 //初始化布局控件
                 TextView mTextView = toastRoot.findViewById(R.id.message);
-
 
                 Toast toast = new Toast(getApplicationContext());
                 toast.setGravity(Gravity.TOP, 0, 100);

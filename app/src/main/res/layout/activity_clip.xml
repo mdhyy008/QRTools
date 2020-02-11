@@ -5,7 +5,9 @@
     android:id="@+id/cons"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ClipActivity">
+    tools:context=".ClipActivity"
+    android:background="#ffffff"
+    >
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">

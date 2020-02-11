@@ -62,6 +62,7 @@ public class WebActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
+        getSupportActionBar().setElevation(0);
 
         //dark
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)

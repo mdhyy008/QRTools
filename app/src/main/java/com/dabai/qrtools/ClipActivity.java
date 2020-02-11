@@ -66,6 +66,7 @@ public class ClipActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clip);
+        getSupportActionBar().setElevation(0);
 
         tv = findViewById(R.id.clip_tv);
         img = findViewById(R.id.clip_imageView);

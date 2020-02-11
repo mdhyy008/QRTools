@@ -50,12 +50,12 @@ public class BrowserOpen extends AppCompatActivity {
         setContentView(R.layout.browser);
 
 
-
         //是否阻止截图
         if (Control.is_sc) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         }
 
+        getSupportActionBar().setElevation(0);
 
         //val
         tv = findViewById(R.id.textView);

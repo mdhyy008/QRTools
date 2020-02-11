@@ -81,6 +81,7 @@ public class MoreActivity extends AppCompatActivity {
         }
         cons = findViewById(R.id.cons);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
 
         list = new ArrayList<>();
 

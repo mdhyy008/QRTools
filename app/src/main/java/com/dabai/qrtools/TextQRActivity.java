@@ -99,6 +99,7 @@ public class TextQRActivity extends AppCompatActivity {
         setContentView(R.layout.activity_text_qr);
 
         setTitle("二维码生成");
+        getSupportActionBar().setElevation(0);
 
         context = getApplicationContext();
         img = findViewById(R.id.QR_create_imageView);

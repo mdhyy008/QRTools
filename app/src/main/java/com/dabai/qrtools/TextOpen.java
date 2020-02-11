@@ -39,7 +39,7 @@ import java.util.Hashtable;
 import java.util.Random;
 import java.util.regex.Matcher;
 
-public class TextOpen extends AppCompatActivity {
+public class  TextOpen extends AppCompatActivity {
 
     TextView tv;
     ImageView img;
@@ -67,6 +67,7 @@ public class TextOpen extends AppCompatActivity {
         sw1 = findViewById(R.id.text_open_switch1);
         cons = findViewById(R.id.cons);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
 
         //是否阻止截图
         if (Control.is_sc) {

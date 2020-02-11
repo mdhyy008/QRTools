@@ -37,6 +37,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.dabai.qrtools.utils.DragTouchListener;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.FormatException;
@@ -83,7 +84,7 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Intent intent = getIntent();
+        getSupportActionBar().setElevation(0);
 
 
         //是否阻止截图
@@ -103,6 +104,7 @@ public class ScanToolActivity extends AppCompatActivity implements CameraScanner
 
         mButton_Flash = findViewById(R.id.btn_flash);
         mButton_Flash.setOnClickListener(this);
+
 
 
         resdia = new AlertDialog.Builder(this).setTitle("结果").setMessage("正在过滤数据")
