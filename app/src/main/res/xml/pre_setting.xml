@@ -53,11 +53,7 @@
 
 
     <PreferenceCategory android:title="其他">
-        <PreferenceScreen
-            android:icon="@mipmap/lt"
-            android:key="other_feedback"
-            android:summary="快速发送反馈信息到开发者微信"
-            android:title="反馈问题" />
+
         <PreferenceScreen
             android:icon="@mipmap/alipay"
             android:key="other_pay"
@@ -68,7 +64,11 @@
             android:icon="@mipmap/fx"
             android:key="other_share"
             android:title="分享" />
-
+        <PreferenceScreen
+            android:icon="@mipmap/lt"
+            android:key="other_feedback"
+            android:summary="快速发送反馈信息到开发者微信"
+            android:title="反馈问题" />
         <PreferenceScreen
             android:icon="@mipmap/ls"
             android:key="other_version"
@@ -76,13 +76,7 @@
         <PreferenceScreen
             android:icon="@mipmap/wz"
             android:key="other_help"
-            android:title="帮助" />
-
-        <PreferenceScreen
-            android:icon="@mipmap/bq"
-            android:key="other_about"
-            android:title="关于" />
-
+            android:title="帮助&amp;关于" />
 
     </PreferenceCategory>
 

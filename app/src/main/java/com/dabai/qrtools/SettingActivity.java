@@ -436,7 +436,7 @@ public class SettingActivity extends PreferenceActivity {
                 startActivity(new Intent(this, FeedBack.class));
                 break;
             case "other_help":
-                new DabaiUtils().openLink(this, "https://github.com/dabai2017/MyStorage/blob/master/qrt_help.md#主界面");
+                new DabaiUtils().openLink(this, "https://dabai2017.gitee.io/qrtools-lead");
                 break;
             case "other_version":
 
@@ -497,9 +497,7 @@ public class SettingActivity extends PreferenceActivity {
                 }).start();
 
                 break;
-            case "other_about":
-                new DabaiUtils().openLink(this, "https://github.com/dabai2017/MyStorage/blob/master/qrt_about.md#二维码工具---qrt");
-                break;
+
             case "clip_monitor":
                 boolean clip_monitor = preference.getSharedPreferences().getBoolean("clip_monitor", false);
                 //即时生效
